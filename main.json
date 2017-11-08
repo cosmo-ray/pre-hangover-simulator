@@ -1,0 +1,24 @@
+{
+    "main" : {
+	"<type>" : "menu",
+	"entries" : [
+	    {
+		"text" : "Play",
+		"next" : "phs:game",
+		"action" : "menuNext",
+	    },
+	    {
+		"text" : "Full Screen",
+		"action" : "FullScreenOnOff"
+	    },
+	    {
+		"text" : "Quit",
+		"text-color" : "rgba: 255 100 100 255",
+		"action" : "FinishGame"
+	    }
+	],
+	"text-align" : "center",
+	"text-color" : "rgba: 100 100 100 255",
+	"background" : "main screen.png"
+    }
+}

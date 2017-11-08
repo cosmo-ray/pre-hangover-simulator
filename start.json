@@ -1,0 +1,22 @@
+{
+    "name" : "phs",
+    "file" : "main.json",
+    "type" : "json",
+    "starting widget" : "main",
+    "as" : "scenes",
+    "init-scripts" : [
+	["lua", "init"]
+    ],
+    "pre-load" : [
+	{
+	    "file" : "./resources.json",
+	    "type" : "json",
+	    "as" : "resources"
+	},
+	{
+	    "file" : "init.lua",
+	    "type" : "lua"
+	},
+
+    ]
+}
