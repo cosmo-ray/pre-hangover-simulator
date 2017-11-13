@@ -1,6 +1,17 @@
+local Q_KEY = 113
+
 function phsAction(entity, eve, arg)
    print("action !",
 	 yeGetString(yeGet(yeGet(yeGet(entity, "resources"), 0), "img")))
+   while ywidEveIsEnd(eve) == false do
+      if ywidEveType(eve) == YKEY_DOWN then
+	 if ywidEveKey(eve) == Q_KEY then
+	    yFinishGame()
+	 end
+      end
+      eve = ywidNextEve(eve)
+   end
+   return YEVE_ACTION
 end
 
 function initPhsWidget(entity)
