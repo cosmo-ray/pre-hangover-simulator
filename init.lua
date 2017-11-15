@@ -1,4 +1,10 @@
 local Q_KEY = 113
+local BASE_CHAR_SPEED = 10
+local BASE_SCROLL_SPEED = 5
+
+function createMap(map)
+
+end
 
 function phsAction(entity, eve, arg)
    print("action !",
@@ -19,6 +25,10 @@ function initPhsWidget(entity)
    yeCreateString("rgba: 0 0 0 255", entity, "background")
    yeCreateFunction("phsAction", entity, "action")
    yeCreateInt(150000, entity, "turn-length")
+   objs = yeCreateArray(entity, "objs");
+   obj = yeCreateArray(objs);
+   ywPosCreate(25, 40, obj, "pos");
+   yeCreateInt(0, obj, "id");
    local canvas = ywidNewWidget(entity, "canvas")
    return canvas
 end

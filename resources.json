@@ -1,4 +1,3 @@
 [
-    { "img" : "tests/head.png" },
-    { "img" : "tests/hero.png" }
+    { "img" : "assets/Skorpio_Pack/Streets", "img-src-rect": [320, 512, 96, 96]}
 ]
