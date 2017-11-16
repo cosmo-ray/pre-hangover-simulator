@@ -6,9 +6,36 @@ function createMap(map)
 
 end
 
+function createStreetLine(entity, idx, objs)
+   local obj = yeCreateArray(objs)
+      ywPosCreate(0, idx, obj, "pos")
+      yeCreateInt(0, obj, "id")
+      obj = yeCreateArray(objs)
+      ywPosCreate(70, idx, obj, "pos")
+      yeCreateInt(1, obj, "id")
+      jdx = 140
+      while jdx < 500 do
+         obj = yeCreateArray(objs)
+         ywPosCreate(jdx, idx, obj, "pos")
+         yeCreateInt(3, obj, "id")
+         jdx = jdx + 60
+      end
+      obj = yeCreateArray(objs)
+      ywPosCreate(500, idx, obj, "pos")
+      yeCreateInt(2, obj, "id")
+      obj = yeCreateArray(objs)
+      ywPosCreate(570, idx, obj, "pos")
+      yeCreateInt(0, obj, "id")
+
+end
+
 function phsAction(entity, eve, arg)
+   local objs = yeGet(entity, "objs")
+   local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
+
    print("action !",
-	 yeGetString(yeGet(yeGet(yeGet(entity, "resources"), 0), "img")))
+	 yeGetString(yeGet(yeGet(yeGet(entity, "resources"), 0), "img")),
+	 yeGetInt(yeGet(entity, "road-end-idx")))
    while ywidEveIsEnd(eve) == false do
       if ywidEveType(eve) == YKEY_DOWN then
 	 if ywidEveKey(eve) == Q_KEY then
@@ -17,6 +44,19 @@ function phsAction(entity, eve, arg)
       end
       eve = ywidNextEve(eve)
    end
+
+   local idx = 0
+   local pos = ywPosCreate(0, BASE_SCROLL_SPEED)
+   while (idx < endRoad) do
+      ywCanvasMoveObjByIdx(entity, idx, pos)
+      idx = idx + 1
+      print (idx)
+--      if (idx % 70 == 0) then
+	 --print(idx)
+	 --createStreetLine(entity, 0, objs)
+--      end
+   end
+   yeDestroy(pos)
    return YEVE_ACTION
 end
 
@@ -25,10 +65,35 @@ function initPhsWidget(entity)
    yeCreateString("rgba: 0 0 0 255", entity, "background")
    yeCreateFunction("phsAction", entity, "action")
    yeCreateInt(150000, entity, "turn-length")
-   objs = yeCreateArray(entity, "objs");
-   obj = yeCreateArray(objs);
-   ywPosCreate(25, 40, obj, "pos");
-   yeCreateInt(0, obj, "id");
+   local objs = yeCreateArray(entity, "objs");
+
+   local screenH = 480
+   local idx = 0;
+   while idx < screenH do
+      createStreetLine(entity, idx, objs)
+      --[[local obj = yeCreateArray(objs)
+      ywPosCreate(0, idx, obj, "pos")
+      yeCreateInt(0, obj, "id")
+      obj = yeCreateArray(objs)
+      ywPosCreate(70, idx, obj, "pos")
+      yeCreateInt(1, obj, "id")
+      jdx = 140
+      while jdx < 500 do
+	 obj = yeCreateArray(objs)
+	 ywPosCreate(jdx, idx, obj, "pos")
+	 yeCreateInt(3, obj, "id")
+	 jdx = jdx + 60
+      end
+      obj = yeCreateArray(objs)
+      ywPosCreate(500, idx, obj, "pos")
+      yeCreateInt(2, obj, "id")
+      obj = yeCreateArray(objs)
+      ywPosCreate(570, idx, obj, "pos")
+	 yeCreateInt(0, obj, "id")--]]
+      idx = idx + 70
+   end
+   yeCreateInt(yeLen(objs), entity, "road-end-idx")
+
    local canvas = ywidNewWidget(entity, "canvas")
    return canvas
 end

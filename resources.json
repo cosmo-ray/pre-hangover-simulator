@@ -1,3 +1,6 @@
 [
-    { "img" : "assets/Skorpio_Pack/Streets", "img-src-rect": [320, 512, 96, 96]}
+    { "img" : "assets/Skorpio_Pack/Street.png", "img-src-rect": [334, 524, 70, 70]},
+    { "img" : "assets/Skorpio_Pack/Street.png", "img-src-rect": [346, 524, 70, 70]},
+    { "img" : "assets/Skorpio_Pack/Street.png", "img-src-rect": [326, 524, 70, 70]},
+    { "img" : "assets/Skorpio_Pack/Street.png", "img-src-rect": [3, 1, 60, 70]}
 ]
