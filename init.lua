@@ -2,31 +2,16 @@ local Q_KEY = 113
 local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
 
-function createMap(map)
-
-end
-
-function createStreetLine(entity, idx, objs)
-   local obj = yeCreateArray(objs)
-      ywPosCreate(0, idx, obj, "pos")
-      yeCreateInt(0, obj, "id")
-      obj = yeCreateArray(objs)
-      ywPosCreate(70, idx, obj, "pos")
-      yeCreateInt(1, obj, "id")
-      jdx = 140
-      while jdx < 500 do
-         obj = yeCreateArray(objs)
-         ywPosCreate(jdx, idx, obj, "pos")
-         yeCreateInt(3, obj, "id")
-         jdx = jdx + 60
-      end
-      obj = yeCreateArray(objs)
-      ywPosCreate(500, idx, obj, "pos")
-      yeCreateInt(2, obj, "id")
-      obj = yeCreateArray(objs)
-      ywPosCreate(570, idx, obj, "pos")
-      yeCreateInt(0, obj, "id")
-
+function createStreetLine(wid, idx)
+   ywCanvasNewObj(wid, 0, idx, 0)
+   ywCanvasNewObj(wid, 70, idx, 1)
+   jdx = 140
+   while jdx < 500 do
+      ywCanvasNewObj(wid, jdx, idx, 3)
+      jdx = jdx + 60
+   end
+   ywCanvasNewObj(wid, 500, idx, 2)
+   ywCanvasNewObj(wid, 570, idx, 0)
 end
 
 function phsAction(entity, eve, arg)
