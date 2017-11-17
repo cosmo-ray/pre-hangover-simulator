@@ -18,9 +18,9 @@ function phsAction(entity, eve, arg)
    local objs = yeGet(entity, "objs")
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
 
-   print("action !",
-	 yeGetString(yeGet(yeGet(yeGet(entity, "resources"), 0), "img")),
-	 yeGetInt(yeGet(entity, "road-end-idx")))
+--   print("action !",
+--	 yeGetString(yeGet(yeGet(yeGet(entity, "resources"), 0), "img")),
+--	 yeGetInt(yeGet(entity, "road-end-idx")))
    while ywidEveIsEnd(eve) == false do
       if ywidEveType(eve) == YKEY_DOWN then
 	 if ywidEveKey(eve) == Q_KEY then
@@ -29,17 +29,19 @@ function phsAction(entity, eve, arg)
       end
       eve = ywidNextEve(eve)
    end
-
-   local idx = 0
    local pos = ywPosCreate(0, BASE_SCROLL_SPEED)
+   local curPos = yeGet(yeGet(objs, 0), "pos")
+--   ywPosPrint(curPos)
+   yeDestroy(pos)
+   if ywPosY(curPos) % 70 == 0 and ywPosY(curPos) > -70 then
+      local pos = ywPosCreate(0, -65 - ywPosY(curPos))
+   else
+      local pos = ywPosCreate(0, BASE_SCROLL_SPEED)
+   end
+   local idx = 0
    while (idx < endRoad) do
       ywCanvasMoveObjByIdx(entity, idx, pos)
       idx = idx + 1
-      print (idx)
---      if (idx % 70 == 0) then
-	 --print(idx)
-	 --createStreetLine(entity, 0, objs)
---      end
    end
    yeDestroy(pos)
    return YEVE_ACTION
@@ -53,7 +55,7 @@ function initPhsWidget(entity)
    local objs = yeCreateArray(entity, "objs");
 
    local screenH = 480
-   local idx = 0;
+   local idx = -70;
    while idx < screenH do
       createStreetLine(entity, idx, objs)
       --[[local obj = yeCreateArray(objs)
