@@ -14,6 +14,28 @@ function createStreetLine(wid, idx)
    ywCanvasNewObj(wid, 570, idx, 0)
 end
 
+function moveSara(entity, eve, objs)
+   local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
+   local saraPos = yeGet(yeGet(objs, endRoad), "pos")
+   if ywidEveKey(eve) == Y_UP_KEY then
+      saraPos = ywPosCreate(0, - BASE_CHAR_SPEED)
+      ywCanvasMoveObjByIdx(entity, endRoad, saraPos)
+      return
+   elseif ywidEveKey(eve) == Y_DOWN_KEY then
+      saraPos = ywPosCreate(0, BASE_CHAR_SPEED)
+      ywCanvasMoveObjByIdx(entity, endRoad, saraPos)
+      return
+   elseif ywidEveKey(eve) == Y_LEFT_KEY then
+      saraPos = ywPosCreate(- BASE_CHAR_SPEED, 0)
+      ywCanvasMoveObjByIdx(entity, endRoad, saraPos)
+      return
+   elseif ywidEveKey(eve) == Y_RIGHT_KEY then
+      saraPos = ywPosCreate(BASE_CHAR_SPEED, 0)
+      ywCanvasMoveObjByIdx(entity, endRoad, saraPos)
+      return
+   end
+end
+
 function phsAction(entity, eve, arg)
    local objs = yeGet(entity, "objs")
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
@@ -25,6 +47,12 @@ function phsAction(entity, eve, arg)
       if ywidEveType(eve) == YKEY_DOWN then
 	 if ywidEveKey(eve) == Q_KEY then
 	    yFinishGame()
+	 elseif ywidEveKey(eve) == Y_UP_KEY
+	    or ywidEveKey(eve) == Y_DOWN_KEY
+	    or ywidEveKey(eve) == Y_RIGHT_KEY
+	    or ywidEveKey(eve) == Y_LEFT_KEY
+	 then
+	    moveSara(entity, eve, objs)
 	 end
       end
       eve = ywidNextEve(eve)
@@ -43,6 +71,7 @@ function phsAction(entity, eve, arg)
       ywCanvasMoveObjByIdx(entity, idx, pos)
       idx = idx + 1
    end
+  -- ywCanvasMoveObjByIdx(entity, yeGetInt(yeGet(entity, "sara")), 0)
    yeDestroy(pos)
    return YEVE_ACTION
 end
@@ -57,7 +86,7 @@ function initPhsWidget(entity)
    local screenH = 480
    local idx = -70;
    while idx < screenH do
-      createStreetLine(entity, idx, objs)
+      createStreetLine(entity, idx)
       --[[local obj = yeCreateArray(objs)
       ywPosCreate(0, idx, obj, "pos")
       yeCreateInt(0, obj, "id")
@@ -80,7 +109,8 @@ function initPhsWidget(entity)
       idx = idx + 70
    end
    yeCreateInt(yeLen(objs), entity, "road-end-idx")
-
+   ywCanvasNewObj(entity, 350, 250, 4)
+--   yeCreateInt(yeLen(objs), entity, "sara")
    local canvas = ywidNewWidget(entity, "canvas")
    return canvas
 end
