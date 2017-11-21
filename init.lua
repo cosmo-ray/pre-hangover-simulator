@@ -14,7 +14,7 @@ function createStreetLine(wid, idx)
    ywCanvasNewObj(wid, 570, idx, 0)
 end
 
-function moveSara(entity, eve, objs)
+--[[function moveSaraBackup(entity, eve, objs)
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
    local saraPos = yeGet(yeGet(objs, endRoad), "pos")
    if ywidEveKey(eve) == Y_UP_KEY then
@@ -25,7 +25,8 @@ function moveSara(entity, eve, objs)
       saraPos = ywPosCreate(0, BASE_CHAR_SPEED)
       ywCanvasMoveObjByIdx(entity, endRoad, saraPos)
       return
-   elseif ywidEveKey(eve) == Y_LEFT_KEY then
+   end 
+   if ywidEveKey(eve) == Y_LEFT_KEY then
       saraPos = ywPosCreate(- BASE_CHAR_SPEED, 0)
       ywCanvasMoveObjByIdx(entity, endRoad, saraPos)
       return
@@ -34,29 +35,49 @@ function moveSara(entity, eve, objs)
       ywCanvasMoveObjByIdx(entity, endRoad, saraPos)
       return
    end
+end]]
+
+function moveSara(entity, eve, objs)
+   local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
+   local saraPos = yeGet(yeGet(objs, endRoad), "pos")
+
+   saraPos = ywPosCreate(BASE_CHAR_SPEED * moveRight - BASE_CHAR_SPEED * moveLeft,
+			 BASE_CHAR_SPEED * moveDown - BASE_CHAR_SPEED * moveUp)
+   ywCanvasMoveObjByIdx(entity, endRoad, saraPos)   
 end
 
 function phsAction(entity, eve, arg)
    local objs = yeGet(entity, "objs")
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
 
---   print("action !",
+   --   print("action !",
 --	 yeGetString(yeGet(yeGet(yeGet(entity, "resources"), 0), "img")),
 --	 yeGetInt(yeGet(entity, "road-end-idx")))
    while ywidEveIsEnd(eve) == false do
-      if ywidEveType(eve) == YKEY_DOWN then
-	 if ywidEveKey(eve) == Q_KEY then
-	    yFinishGame()
-	 elseif ywidEveKey(eve) == Y_UP_KEY
+      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Q_KEY then yFinishGame() end
+      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_UP_KEY then moveUp = 1 end
+      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 1 end
+      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 1 end
+      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 1 end
+      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_UP_KEY then moveUp = 0 end
+      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 0 end
+      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 0 end
+      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 0 end
+      
+	    
+--[[	 elseif ywidEveKey(eve) == Y_UP_KEY
 	    or ywidEveKey(eve) == Y_DOWN_KEY
 	    or ywidEveKey(eve) == Y_RIGHT_KEY
 	    or ywidEveKey(eve) == Y_LEFT_KEY
 	 then
 	    moveSara(entity, eve, objs)
 	 end
-      end
+   end]]
       eve = ywidNextEve(eve)
+--      moveSara(entity, eve, objs)
    end
+   moveSara(entity, eve, objs)
+   print("Up : ", moveUp)
    local pos = ywPosCreate(0, BASE_SCROLL_SPEED)
    local curPos = yeGet(yeGet(objs, 0), "pos")
 --   ywPosPrint(curPos)
@@ -77,6 +98,11 @@ function phsAction(entity, eve, arg)
 end
 
 function initPhsWidget(entity)
+   moveUp = 0
+   moveDown = 0
+   moveLeft = 0
+   moveRight = 0
+
    print("new wid", yeGet(entity, "<type>"))
    yeCreateString("rgba: 0 0 0 255", entity, "background")
    yeCreateFunction("phsAction", entity, "action")
