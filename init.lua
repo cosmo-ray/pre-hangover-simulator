@@ -1,7 +1,7 @@
 local Q_KEY = 113
 local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
-local OBSTACLE_DENSITY = 50
+local OBSTACLE_DENSITY = 26
 
 function createStreetLine(wid, idx)
    ywCanvasNewObj(wid, 0, idx, 0)
@@ -56,7 +56,7 @@ function phsAction(entity, eve, arg)
       
       eve = ywidNextEve(eve)
    end
-   if turnNb % OBSTACLE_DENSITY == 0 then
+   if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
       createObstacle(entity)
    end
    moveObstacles(entity)
@@ -100,6 +100,16 @@ function createObstacle(entity)
    local garbage = ywCanvasNewObj(entity, yuiRand() % 600, -70, 5)
 
    yeCreateInt(1, garbage, "type")
+   local touchByGarbage = ywCanvasNewColisionsArray(entity, garbage)
+   for i = 0, yeLen(touchByGarbage) do
+      local touched = yeGet(touchByGarbage, i)
+      if yeGetInt(yeGet(touched, "type")) == 1 then
+	 yeRemoveChild(entity, garbage)
+	 yeDestroy(garbage)
+	 print("Garbage Dump")
+	 return
+      end
+   end
    yePushBack(yeGet(entity, "obstacles"), garbage)
    yeDestroy(garbage)
 end
