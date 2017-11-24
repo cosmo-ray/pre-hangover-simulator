@@ -12,6 +12,16 @@
 		"action" : "FullScreenOnOff"
 	    },
 	    {
+		"text" : "Story",
+		"next" : "phs:scenes.story",
+		"action" : "menuNext"
+	    },
+	    {
+		"text" : "Credit",
+		"next" : "phs:scenes.credit",
+		"action" : "menuNext"
+	    },
+	    {
 		"text" : "Quit",
 		"text-color" : "rgba: 255 100 100 255",
 		"action" : "FinishGame"
@@ -20,5 +30,32 @@
 	"text-align" : "center",
 	"text-color" : "rgba: 100 100 100 255",
 	"background" : "main screen.png"
+    },
+    "story" : {
+	"<type>" : "text-screen",
+	"text" :
+	"You are Sara, great idol of opengameart.com
+As any Idol, you do what every idol do
+(not taking drug obviously, this game is for everyone)
+You are drinking orange juice, with your friend Ruby
+After drinking 1.667 little of Orange Juice,
+barly the time to say abro kadabra and Ruby left you...
+you are drunk, you you're home is Faro...way
+
+PS: on the way back home, please:
+don't trow back everything you've drink on yourself",
+	"text-align": "center",
+	"action" : "nextOnKeyDown",
+	"next" : "phs:scenes.main",
+	"background" : "rgba: 255 255 255 255"
+    },
+    "credit" : {
+	"<type>" : "text-screen",
+	"text" :
+	"TODO",
+	"text-align": "center",
+	"action" : "nextOnKeyDown",
+	"next" : "phs:scenes.main",
+	"background" : "rgba: 255 255 255 255"
     }
 }
