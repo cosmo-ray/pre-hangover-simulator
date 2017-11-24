@@ -3,6 +3,7 @@
     { "img" : "assets/Skorpio_Pack/Street.png", "img-src-rect": [346, 524, 70, 70]},
     { "img" : "assets/Skorpio_Pack/Street.png", "img-src-rect": [326, 524, 70, 70]},
     { "img" : "assets/Skorpio_Pack/Street.png", "img-src-rect": [3, 1, 60, 70]},
-    { "img" : "assets/LPC_Sara/SaraFullSheet.png", "img-src-rect": [15, 520, 35, 60]},
-    { "img" : "assets/Skorpio_Pack/Objects.png", "img-src-rect": [138, 97, 74, 61]}
+    { "img" : "assets/Skorpio_Pack/Objects.png", "img-src-rect": [138, 97, 74, 61]},
+    { "img" : "assets/LPC_Sara/SaraFullSheet.png", "img-src-rect": [210, 520, 30, 60]},
+    { "img" : "assets/LPC_Sara/SaraFullSheet.png", "img-src-rect": [400, 520, 30, 60]},
 ]

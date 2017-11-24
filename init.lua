@@ -17,11 +17,20 @@ end
 
 function moveSara(entity, eve, objs)
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
-   local saraIdx = ywCanvasIdxFromObj(entity, yeGet(entity, "sara"))
+   local sara = yeGet(entity, "sara")
+   local saraIdx = ywCanvasIdxFromObj(entity, sara)
    local saraPos = ywPosCreate(BASE_CHAR_SPEED * moveRight - BASE_CHAR_SPEED * moveLeft,
 			       BASE_CHAR_SPEED * moveDown - BASE_CHAR_SPEED * moveUp)
    ywCanvasMoveObjByIdx(entity, saraIdx, saraPos)
    yeDestroy(saraPos)
+   if (turnNb % 2) == 0 then
+      if saraId == 5 then
+      	 saraId = 6
+      else
+         saraId = 5
+      end
+      ywCanvasObjSetResourceId(sara, saraId)
+   end
 end
 
 function checkColisions(entity)
@@ -97,7 +106,7 @@ function moveObstacles(entity)
 end
 
 function createObstacle(entity)
-   local garbage = ywCanvasNewObj(entity, yuiRand() % 600, -70, 5)
+   local garbage = ywCanvasNewObj(entity, yuiRand() % 600, -70, 4)
 
    yeCreateInt(1, garbage, "type")
    local touchByGarbage = ywCanvasNewColisionsArray(entity, garbage)
@@ -130,7 +139,8 @@ function initPhsWidget(entity)
       idx = idx + 70
    end
    yeCreateInt(yeLen(objs), entity, "road-end-idx")
-   local sara = ywCanvasNewObj(entity, 350, 250, 4)
+   saraId = 6
+   local sara = ywCanvasNewObj(entity, 350, 250, saraId)
    yePushBack(entity, sara, "sara")
    yeCreateArray(entity, "obstacles")
    
