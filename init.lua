@@ -56,9 +56,9 @@ function phsAction(entity, eve, arg)
       
       eve = ywidNextEve(eve)
    end
-   if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
-      createObstacle(entity)
-   end
+   --if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
+   createObstacle(entity)
+   --end
    moveObstacles(entity)
    moveSara(entity, eve, objs)
    checkColisions(entity)
@@ -104,14 +104,11 @@ function createObstacle(entity)
    for i = 0, yeLen(touchByGarbage) do
       local touched = yeGet(touchByGarbage, i)
       if yeGetInt(yeGet(touched, "type")) == 1 then
-	 yeRemoveChild(entity, garbage)
-	 yeDestroy(garbage)
-	 print("Garbage Dump")
+	 yeRemoveChild(yeGet(entity, "objs"), garbage)
 	 return
       end
    end
    yePushBack(yeGet(entity, "obstacles"), garbage)
-   yeDestroy(garbage)
 end
 
 function initPhsWidget(entity)
