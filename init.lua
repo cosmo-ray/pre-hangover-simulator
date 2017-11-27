@@ -39,10 +39,17 @@ function checkColisions(entity)
    for i = 0, yeLen(touchBySara) do
       local touched = yeGet(touchBySara, i)
       if yeGetInt(yeGet(touched, "type")) == 1 then
-	 print("she touch me")
-	 local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
-	 print(pbs)
-	 ywPosSet(pbs, ywPosX(pbs) - 1, ywPosY(pbs))
+        print("she touch me")
+        local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
+        ywPosSet(pbs, ywPosX(pbs) + 30, ywPosY(pbs))
+        if  ywPosX(pbs) >= 640 then
+          print("you lose, like really lose, sara puke on herself because of you")
+          print("you are a disrespect to Sara and what opengameart have ever try to acomplish")
+          print("you should stop playing video game, and go forget you're patetic life by drinking cheap russian orange juice make of patatoes")
+          print("and if you're still interested, here's you're score: ", score)
+          yFinishGame()
+        end
+        print(ywPosX(pbs))
       end
    end
    --print(touchBySara, yeLen(touchBySara))
@@ -86,6 +93,8 @@ function phsAction(entity, eve, arg)
    end
    yeDestroy(pos)
    turnNb = turnNb +1
+   -- score update:
+   score = score + 1
    return YEVE_ACTION
 end
 
@@ -126,7 +135,8 @@ function initPhsWidget(entity)
    moveLeft = 0
    moveRight = 0
    turnNb = 0
-   
+   score = 0;
+
    yeCreateString("rgba: 0 0 0 255", entity, "background")
    yeCreateFunction("phsAction", entity, "action")
    yeCreateInt(100000, entity, "turn-length")
