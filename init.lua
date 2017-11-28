@@ -58,7 +58,7 @@ end
 function phsAction(entity, eve, arg)
    local objs = yeGet(entity, "objs")
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
-   
+
    while ywidEveIsEnd(eve) == false do
       if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Q_KEY then yFinishGame() end
       if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_UP_KEY then moveUp = 1 end
@@ -69,7 +69,7 @@ function phsAction(entity, eve, arg)
       if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 0 end
       if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 0 end
       if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 0 end
-      
+
       eve = ywidNextEve(eve)
    end
    --if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
@@ -153,7 +153,7 @@ function initPhsWidget(entity)
    local sara = ywCanvasNewObj(entity, 350, 250, saraId)
    yePushBack(entity, sara, "sara")
    yeCreateArray(entity, "obstacles")
-   
+
    createObstacle(entity)
 
    local obj = yeCreateArray(objs)
