@@ -49,6 +49,20 @@ don't trow back everything you've drink on yourself",
 	"next" : "phs:scenes.main",
 	"background" : "rgba: 255 255 255 255"
     },
+    "lose" : {
+	"<type>" : "text-screen",
+	"text" :
+	"you lose, like really lose, sara puke on herself because of you
+you are a disrespect to Sara and what opengameart ever try to acomplish
+you should stop playing video game
+go forget you're patetic life
+by drinking cheap russian orange juice make of patatoes
+Oh and if you're still wondering
+here's you're patetic score: ",
+	"text-align": "center",
+	"action" : "QuitOnKeyDown",
+	"background" : "rgba: 255 255 255 255"
+    },
     "credit" : {
 	"<type>" : "text-screen",
 	"text" :
