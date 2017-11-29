@@ -225,13 +225,13 @@ end
 
 function createObstacle(entity)
    local garbage
-   local nb = yuiRand() % 3
+   local nb = yuiRand() % 7
 
-   if nb == 0 then
+   if nb <= 4 then
       garbage = createGarbage(entity)
-   elseif nb == 1 then
+   elseif nb == 5 then
       garbage = createSuiteGuy(entity)
-   elseif nb == 2 then
+   elseif nb == 6 then
       garbage = createAntiPukePile(entity)
    end
 

@@ -28,7 +28,7 @@
 	    }
 	],
 	"text-align" : "center",
-	"text-color" : "rgba: 100 100 100 255",
+	"text-color" : "rgba: 255 100 255 255",
 	"background" : "main screen.png"
     },
     "story" : {
@@ -47,7 +47,7 @@ don't trow back everything you've drink on yourself",
 	"text-align": "center",
 	"action" : "nextOnKeyDown",
 	"next" : "phs:scenes.main",
-	"background" : "rgba: 255 255 255 255"
+	"background" : "rgba: 255 100 255 255"
     },
     "lose" : {
 	"<type>" : "text-screen",
