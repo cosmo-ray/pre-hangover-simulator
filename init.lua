@@ -19,9 +19,17 @@ function moveSara(entity, eve, objs)
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
    local sara = yeGet(entity, "sara")
    local saraIdx = ywCanvasIdxFromObj(entity, sara)
+   local curPos = ywCanvasObjPos(sara)
    local saraPos = ywPosCreate(BASE_CHAR_SPEED * moveRight - BASE_CHAR_SPEED * moveLeft,
 			       BASE_CHAR_SPEED * moveDown - BASE_CHAR_SPEED * moveUp)
+   if ywPosX(saraPos) + ywPosX(curPos) > 610 or ywPosX(saraPos) + ywPosX(curPos) < 0 then
+      ywPosSet(saraPos, 0, ywPosY(saraPos))
+   end
+   if ywPosY(saraPos) + ywPosY(curPos) > 430 or ywPosY(saraPos) + ywPosY(curPos) < 0 then
+      ywPosSet(saraPos, ywPosX(saraPos), 0)
+   end
    ywCanvasMoveObjByIdx(entity, saraIdx, saraPos)
+
    yeDestroy(saraPos)
    if (turnNb % 2) == 0 then
       if saraId == 5 then
@@ -137,6 +145,7 @@ function initPhsWidget(entity)
    turnNb = 0
    score = 0;
 
+   ySoundPlay(ySoundLoad("sara_song.mp3"))
    yeCreateString("rgba: 0 0 0 255", entity, "background")
    yeCreateFunction("phsAction", entity, "action")
    yeCreateInt(100000, entity, "turn-length")
