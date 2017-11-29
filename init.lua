@@ -81,6 +81,14 @@ function phsAction(entity, eve, arg)
       eve = ywidNextEve(eve)
    end
 
+   if niceGuyText2 then
+      if niceGuyText2Duration == 0 then
+	 ywCanvasRemoveObj(entity, niceGuyText2)
+	 niceGuyText2 = nil
+      else
+	 niceGuyText2Duration = niceGuyText2Duration - 1
+      end
+   end
    if (niceGuyText) then
       ywCanvasRemoveObj(entity, niceGuyText)
       niceGuyText = nil
@@ -125,6 +133,16 @@ function phsAction(entity, eve, arg)
    -- score update:
    score = score + 1
    yeSetString(yeGet(entity, "scoreTxt"), "score " .. score)
+
+   local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
+   if  ywPosX(pbs) >= 620 then
+      print("you lose, like really lose, sara puke on herself because of you")
+      print("you are a disrespect to Sara and what opengameart have ever try to acomplish")
+      print("you should stop playing video game, and go forget you're patetic life by drinking cheap russian orange juice make of patatoes")
+      print("and if you're still interested, here's you're score: ", score)
+      isDieying = 40
+   end
+
    return YEVE_ACTION
 end
 
@@ -145,8 +163,6 @@ function moveObstacles(entity)
 end
 
 function dealDomage(entity, obstacle)
-   print("dealDomage", entity, obstacle)
-
    local txt = yeCreateString("Sara: Ohh a giant trash attack me, go away pile of trash")
    niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
    yeDestroy(txt)
@@ -177,12 +193,38 @@ function createSuiteGuy(entity)
    return ret
 end
 
+function eatBurger(entity, obstacle)
+   local txt = yeCreateString("Sara: mum mum, some anti vomit piles, American gastronomie is soo Good !")
+   if (niceGuyText2) then
+      ywCanvasRemoveObj(entity, obstacle)
+   end
+   niceGuyText2 = ywCanvasNewText(entity, 50, 80, txt)
+   niceGuyText2Duration = 20
+   yeDestroy(txt)
+   local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
+   ywPosSet(pbs, ywPosX(pbs) - 50, ywPosY(pbs))
+   ywCanvasRemoveObj(entity, obstacle)
+end
+
+function createAntiPukePile(entity)
+   local txt = yeCreateString("Burger !!!")
+   ret = ywCanvasNewText(entity, yuiRand() % 600, -70, txt)
+   yeDestroy(txt)
+
+   yeCreateFunction("eatBurger", ret, "onTouch")
+   return ret
+end
+
 function createObstacle(entity)
    local garbage
-   if (yuiRand() % 2) == 0 then
+   local nb = yuiRand() % 3
+
+   if nb == 0 then
       garbage = createGarbage(entity)
-   else
+   elseif nb == 1 then
       garbage = createSuiteGuy(entity)
+   elseif nb == 2 then
+      garbage = createAntiPukePile(entity)
    end
 
    yeCreateInt(1, garbage, "type")
@@ -205,6 +247,8 @@ function initPhsWidget(entity)
    turnNb = 0
    score = 0
    niceGuyText = nil
+   niceGuyText2 = nil
+   niceGuyText2Duration = 0
    isDieying = -1
 
    ySoundPlay(ySoundLoad("sara_song.mp3"))
