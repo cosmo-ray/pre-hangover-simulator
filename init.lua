@@ -99,6 +99,9 @@ function phsAction(entity, eve, arg)
       if isDieying == 0 then
 	 yCallNextWidget(entity);
       end
+      if saraSong then
+	 ywCanvasRemoveObj(entity, saraSong)
+      end
       local txt = yeCreateString("Sara: I'm actually trowing back everyting I've drink on myself\n"..
       "but devlopers are too lazy to give me a puking real animation")
       niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
@@ -144,8 +147,34 @@ function phsAction(entity, eve, arg)
    end
 
    if (ywPosX(pbs) >= 550  and saraSongDuration == 0) then
-      local txt = yeCreateString("Sara: arkk, let's sing\n"..
-      "spam spam spam spam, lovely spam, wonderful spam")
+      local songtxt = "Sara: arkk, let's sing\n"
+      local randNb = yuiRand() % 4
+      if randNb == 0 then
+	 songtxt = songtxt ..
+	    "spam spam spam spam, lovely spam, wonderful spam"
+      elseif randNb == 1 then
+	 songtxt = songtxt ..
+	    "Ohh it's mauvaise chance to be you !\n" ..
+	    "un choisie de many isn't new\n" ..
+	    "when you think you plein de luck, soudainement tu devien stuck\n" ..
+	    "don't pence for a second it's not vrais !!..."
+      elseif randNb == 2 then
+	 songtxt = songtxt ..
+	    "saraba the eath that ship that go away it's\n"..
+	    "uchuu senkan Yamablazer !!! \n" ..
+	    "searching for a distant star heading off to lala...\n"
+      elseif randNb == 3 then
+	 songtxt = songtxt ..
+	    "get it !, get it !, get !\n" ..
+	    "you can get it now\n" ..
+	    "attack attack ore wa shenshi !\n" ..
+	    "kikoeru ka ? kikoeru ka yo ?\n" ..
+	    "tell me why, show me the way to you..."
+      end
+      local txt = yeCreateString(songtxt)
+      if saraSong then
+	 ywCanvasRemoveObj(entity, saraSong)
+      end
       saraSongDuration = 40
       saraSong = ywCanvasNewText(entity, 70, 120, txt)
       yeDestroy(txt)
