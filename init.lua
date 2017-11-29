@@ -49,15 +49,6 @@ function checkColisions(entity)
       if yeGetInt(yeGet(touched, "type")) == 1 then
 	 yesCall(yeGet(touched, "onTouch"), entity, touched)
         local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
-        if  ywPosX(pbs) >= 640 then
-          local nextWidget = ygGet("phs:scenes.lose")
-          local scoreStrEntity = yeGet(nextWidget, "text")
-
-          yeSetString(scoreStrEntity, yeGetString(scoreStrEntity) .. score)
-          yCallNextWidget(entity)
-	  isDieying = 40
-        end
-        print(ywPosX(pbs))
       end
    end
    --print(touchBySara, yeLen(touchBySara))
@@ -106,7 +97,7 @@ function phsAction(entity, eve, arg)
 
    if (isDieying >= 0) then
       if isDieying == 0 then
-	 yFinishGame()
+	 yCallNextWidget(entity);
       end
       local txt = yeCreateString("Sara: I'm actually trowing back everyting I've drink on myself\n"..
       "but devlopers are too lazy to give me a puking real animation")
@@ -146,10 +137,9 @@ function phsAction(entity, eve, arg)
 
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    if  ywPosX(pbs) >= 620 then
-      print("you lose, like really lose, sara puke on herself because of you")
-      print("you are a disrespect to Sara and what opengameart have ever try to acomplish")
-      print("you should stop playing video game, and go forget you're patetic life by drinking cheap russian orange juice make of patatoes")
-      print("and if you're still interested, here's you're score: ", score)
+      local nextWidget = ygGet("phs:scenes.lose")
+      local scoreStrEntity = yeGet(nextWidget, "text")
+      yeSetString(scoreStrEntity, yeGetString(scoreStrEntity) .. score)
       isDieying = 40
    end
 
