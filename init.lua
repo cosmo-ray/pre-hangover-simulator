@@ -1,7 +1,7 @@
 local Q_KEY = 113
 local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
-local OBSTACLE_DENSITY = 20
+local OBSTACLE_DENSITY = 10
 
 function createStreetLine(wid, idx)
    ywCanvasNewObj(wid, 0, idx, 0)
@@ -89,6 +89,16 @@ function phsAction(entity, eve, arg)
 	 niceGuyText2Duration = niceGuyText2Duration - 1
       end
    end
+
+   if saraSong then
+      if saraSongDuration == 0 then
+	 ywCanvasRemoveObj(entity, saraSong)
+	 saraSong = nil
+      else
+	 saraSongDuration = saraSongDuration - 1
+      end
+   end
+
    if (niceGuyText) then
       ywCanvasRemoveObj(entity, niceGuyText)
       niceGuyText = nil
@@ -141,6 +151,14 @@ function phsAction(entity, eve, arg)
       print("you should stop playing video game, and go forget you're patetic life by drinking cheap russian orange juice make of patatoes")
       print("and if you're still interested, here's you're score: ", score)
       isDieying = 40
+   end
+
+   if (ywPosX(pbs) >= 550  and saraSongDuration == 0) then
+      local txt = yeCreateString("Sara: arkk, let's sing\n"..
+      "spam spam spam spam, lovely spam, wonderful spam")
+      saraSongDuration = 40
+      saraSong = ywCanvasNewText(entity, 70, 120, txt)
+      yeDestroy(txt)
    end
 
    return YEVE_ACTION
@@ -249,8 +267,8 @@ function initPhsWidget(entity)
    niceGuyText = nil
    niceGuyText2 = nil
    niceGuyText2Duration = 0
-   SaraSong = nil
-   SaraSongDuration = 0
+   saraSong = nil
+   saraSongDuration = 0
    isDieying = -1
 
    ySoundPlay(ySoundLoad("sara_song.mp3"))
