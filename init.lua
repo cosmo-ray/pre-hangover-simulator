@@ -47,9 +47,8 @@ function checkColisions(entity)
    for i = 0, yeLen(touchBySara) do
       local touched = yeGet(touchBySara, i)
       if yeGetInt(yeGet(touched, "type")) == 1 then
-        print("she touch me")
+	 yesCall(yeGet(touched, "onTouch"), entity, touched)
         local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
-        ywPosSet(pbs, ywPosX(pbs) + 30, ywPosY(pbs))
         if  ywPosX(pbs) >= 640 then
           local nextWidget = ygGet("phs:scenes.lose")
           local scoreStrEntity = yeGet(nextWidget, "text")
@@ -80,9 +79,15 @@ function phsAction(entity, eve, arg)
 
       eve = ywidNextEve(eve)
    end
-   --if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
-   createObstacle(entity)
-   --end
+   if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
+      createObstacle(entity)
+   end
+   if (niceGuyText) then
+      ywCanvasRemoveObj(entity, niceGuyText)
+      niceGuyText = nil
+   end
+   local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
+   ywPosSet(pbs, ywPosX(pbs) + 1, ywPosY(pbs))
    moveObstacles(entity)
    moveSara(entity, eve, objs)
    checkColisions(entity)
@@ -103,6 +108,7 @@ function phsAction(entity, eve, arg)
    turnNb = turnNb +1
    -- score update:
    score = score + 1
+   yeSetString(yeGet(entity, "scoreTxt"), "score " .. score)
    return YEVE_ACTION
 end
 
@@ -122,8 +128,42 @@ function moveObstacles(entity)
    end
 end
 
-function createObstacle(entity)
+function dealDomage(entity, obstacle)
+   print("dealDomage", entity, obstacle)
+   local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
+   ywPosSet(pbs, ywPosX(pbs) + 30, ywPosY(pbs))
+end
+
+function createGarbage(entity)
    local garbage = ywCanvasNewObj(entity, yuiRand() % 600, -70, 4)
+
+   yeCreateFunction("dealDomage", garbage, "onTouch")
+   return garbage
+end
+
+function meatNiceGuy(entity)
+   local txt = yeCreateString("Nice Guy: You want some orange juice ?, here's some Orange Juice")
+   niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
+   yeDestroy(txt)
+   score = score + 2
+   local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
+   ywPosSet(pbs, ywPosX(pbs) + 4, ywPosY(pbs))
+end
+
+function createSuiteGuy(entity)
+   local ret = ywCanvasNewObj(entity, yuiRand() % 600, -70, 7)
+
+   yeCreateFunction("meatNiceGuy", ret, "onTouch")
+   return ret
+end
+
+function createObstacle(entity)
+   local garbage
+   if (yuiRand() % 2) == 0 then
+      garbage = createGarbage(entity)
+   else
+      garbage = createSuiteGuy(entity)
+   end
 
    yeCreateInt(1, garbage, "type")
    local touchByGarbage = ywCanvasNewColisionsArray(entity, garbage)
@@ -143,7 +183,8 @@ function initPhsWidget(entity)
    moveLeft = 0
    moveRight = 0
    turnNb = 0
-   score = 0;
+   score = 0
+   niceGuyText = nil
 
    ySoundPlay(ySoundLoad("sara_song.mp3"))
    yeCreateString("rgba: 0 0 0 255", entity, "background")
@@ -164,12 +205,19 @@ function initPhsWidget(entity)
    yeCreateArray(entity, "obstacles")
 
    createObstacle(entity)
+   local scoreText = "score " .. score
+   local scoreTxtEnt = yeCreateString(scoreText, entity, "scoreTxt")
+   ywCanvasNewText(entity, 10, 30, scoreTxtEnt)
+
+   scoreTxtEnt = yeCreateString("Puking Bar, also know as Vomit Bar")
+   yeDestroy(scoreText)
+   ywCanvasNewText(entity, 10, 5, scoreTxtEnt)
 
    local obj = yeCreateArray(objs)
    yeCreateInt(1, obj)
-   ywPosCreate(10, 10, obj)
+   ywPosCreate(10, 20, obj)
    local rect = yeCreateArray(obj)
-   ywPosCreate(100, 10, rect)
+   ywPosCreate(10, 10, rect)
    yeCreateString("rgba: 180 50 10 160", rect)
    yePushBack(entity, obj, "pukeBar")
 

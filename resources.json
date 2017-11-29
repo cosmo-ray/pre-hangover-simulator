@@ -6,4 +6,6 @@
     { "img" : "assets/Skorpio_Pack/Objects.png", "img-src-rect": [138, 97, 74, 61]},
     { "img" : "assets/LPC_Sara/SaraFullSheet.png", "img-src-rect": [210, 520, 30, 60]},
     { "img" : "assets/LPC_Sara/SaraFullSheet.png", "img-src-rect": [400, 520, 30, 60]},
+    { "img" : "assets/Skorpio_Pack/Characters/Agent/AgentWalk.png", "img-src-rect": [16, 140, 32, 55]}
+
 ]
