@@ -96,6 +96,7 @@ function phsAction(entity, eve, arg)
       yeDestroy(txt)
 
       isDieying = isDieying - 1
+      ywCanvasObjSetResourceId(yeGet(entity, "sara"), yuiRand() % 6)
       return YEVE_ACTION
    end
    if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
