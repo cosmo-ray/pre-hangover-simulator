@@ -1,7 +1,7 @@
 local Q_KEY = 113
 local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
-local OBSTACLE_DENSITY = 26
+local OBSTACLE_DENSITY = 20
 
 function createStreetLine(wid, idx)
    ywCanvasNewObj(wid, 0, idx, 0)
@@ -249,6 +249,8 @@ function initPhsWidget(entity)
    niceGuyText = nil
    niceGuyText2 = nil
    niceGuyText2Duration = 0
+   SaraSong = nil
+   SaraSongDuration = 0
    isDieying = -1
 
    ySoundPlay(ySoundLoad("sara_song.mp3"))
