@@ -55,6 +55,7 @@ function checkColisions(entity)
 
           yeSetString(scoreStrEntity, yeGetString(scoreStrEntity) .. score)
           yCallNextWidget(entity)
+	  isDieying = 40
         end
         print(ywPosX(pbs))
       end
@@ -79,12 +80,26 @@ function phsAction(entity, eve, arg)
 
       eve = ywidNextEve(eve)
    end
-   if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
-      createObstacle(entity)
-   end
+
    if (niceGuyText) then
       ywCanvasRemoveObj(entity, niceGuyText)
       niceGuyText = nil
+   end
+
+   if (isDieying >= 0) then
+      if isDieying == 0 then
+	 yFinishGame()
+      end
+      local txt = yeCreateString("Sara: I'm actually trowing back everyting I've drink on myself\n"..
+      "but devlopers are too lazy to give me a puking real animation")
+      niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
+      yeDestroy(txt)
+
+      isDieying = isDieying - 1
+      return YEVE_ACTION
+   end
+   if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
+      createObstacle(entity)
    end
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    ywPosSet(pbs, ywPosX(pbs) + 1, ywPosY(pbs))
@@ -130,6 +145,10 @@ end
 
 function dealDomage(entity, obstacle)
    print("dealDomage", entity, obstacle)
+
+   local txt = yeCreateString("Sara: Ohh a giant trash attack me, go away pile of trash")
+   niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
+   yeDestroy(txt)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    ywPosSet(pbs, ywPosX(pbs) + 30, ywPosY(pbs))
 end
@@ -185,6 +204,7 @@ function initPhsWidget(entity)
    turnNb = 0
    score = 0
    niceGuyText = nil
+   isDieying = -1
 
    ySoundPlay(ySoundLoad("sara_song.mp3"))
    yeCreateString("rgba: 0 0 0 255", entity, "background")
