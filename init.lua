@@ -172,6 +172,12 @@ function phsAction(entity, eve, arg)
       if saraSong then
 	 ywCanvasRemoveObj(entity, saraSong)
       end
+      if niceGuyText2 then
+	 ywCanvasRemoveObj(entity, niceGuyText2)
+      end
+      if niceGuyText then
+	 ywCanvasRemoveObj(entity, niceGuyText)
+      end
       saraSongDuration = 40
       saraSong = ywCanvasNewText(entity, 70, 120, txt)
       yeDestroy(txt)
@@ -193,9 +199,9 @@ function moveObstacles(entity)
 	 ywCanvasMoveObjByIdx(entity, obstacleIdx, pos)
 	 yeDestroy(pos)
       end
-      if ywPosY(obstacle) > 500 then
-	-- ywCanvasRemoveObj(entity, obstacle)
-	-- yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
+      if ywPosY(ywCanvasObjPos(obstacle)) > 500 then
+	 ywCanvasRemoveObj(entity, obstacle)
+	 yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
       end
    end
 end
@@ -234,7 +240,7 @@ end
 function eatBurger(entity, obstacle)
    local txt = yeCreateString("Sara: yum yum, some anti vomit pills, American gastronomy is soo Good !")
    if (niceGuyText2) then
-      ywCanvasRemoveObj(entity, obstacle)
+      ywCanvasRemoveObj(entity, niceGuyText2)
    end
    niceGuyText2 = ywCanvasNewText(entity, 50, 80, txt)
    niceGuyText2Duration = 20
@@ -242,6 +248,7 @@ function eatBurger(entity, obstacle)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    ywPosSet(pbs, ywPosX(pbs) - 50, ywPosY(pbs))
    ywCanvasRemoveObj(entity, obstacle)
+   yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
 end
 
 function createAntiPukePile(entity)
