@@ -225,7 +225,8 @@ function createGarbage(entity)
 end
 
 function meatNiceGuy(entity)
-   local txt = yeCreateString("Nice Guy: You want some orange juice ?, here's some Orange Juice")
+   local txt = yeCreateString("Nice Guy: You want some orange juice ?, here's some Orange Juice\n"..
+			      "Sara: glou glou...")
    if niceGuyText then
       ywCanvasRemoveObj(entity, niceGuyText)
    end
@@ -237,8 +238,11 @@ function meatNiceGuy(entity)
 end
 
 function meatCharmingGuy(entity)
-   local txt = yeCreateString("Charming Guy: hejj ! you'e cute mademoiselle, give me you +336 so you can drink orange juice at my home\n"..
-   "Sara: hummm this guy has devinitively a good flirting thenique, I will give him my number")
+   local txt = yeCreateString("Charming Guy: hejj ! mademoiselle you'e cute, give me you phone(BURPP)\n"..
+			      "                I'll give you some free juice at my home\n"..
+			      "Sara: hummm this guy devinitively know how to talk to a girl\n"..
+			      "        I will absolutely give him my number")
+
    if niceGuyText then
       ywCanvasRemoveObj(entity, niceGuyText)
    end
