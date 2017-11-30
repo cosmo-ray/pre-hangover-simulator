@@ -196,6 +196,10 @@ function moveObstacles(entity)
 	 ywCanvasMoveObjByIdx(entity, obstacleIdx, pos)
 	 yeDestroy(pos)
       end
+      if ywPosY(obstacle) > 500 then
+	 ywCanvasRemoveObj(entity, obstacle)
+	 yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
+      end
    end
 end
 
