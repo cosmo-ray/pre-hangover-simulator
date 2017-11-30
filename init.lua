@@ -165,11 +165,11 @@ function phsAction(entity, eve, arg)
 	    "searching for a distant star heading off to lala...\n"
       elseif randNb == 3 then
 	 songtxt = songtxt ..
-	    "get it !, get it !, get !\n" ..
+	    "get it !, get it !, get it !\n" ..
 	    "you can get it now\n" ..
 	    "attack attack ore wa shenshi !\n" ..
 	    "kikoeru ka ? kikoeru ka yo ?\n" ..
-	    "tell me why, show me the way to you..."
+	    "show me the way to youm lead me nowhere you are Heavy Metal !"
       end
       local txt = yeCreateString(songtxt)
       if saraSong then
