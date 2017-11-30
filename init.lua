@@ -140,9 +140,6 @@ function phsAction(entity, eve, arg)
 
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    if  ywPosX(pbs) >= 620 then
-      local nextWidget = ygGet("phs:scenes.lose")
-      local scoreStrEntity = yeGet(nextWidget, "text")
-      yeSetString(scoreStrEntity, yeGetString(scoreStrEntity) .. score)
       isDieying = 40
    end
 
@@ -197,8 +194,8 @@ function moveObstacles(entity)
 	 yeDestroy(pos)
       end
       if ywPosY(obstacle) > 500 then
-	 ywCanvasRemoveObj(entity, obstacle)
-	 yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
+	-- ywCanvasRemoveObj(entity, obstacle)
+	-- yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
       end
    end
 end
@@ -334,6 +331,34 @@ function initPhsWidget(entity)
    return canvas
 end
 
+function getHightscore(wid, eve, args)
+   local hs = ygFileToEnt(YJSON, "phs-hightscore.json")
+
+   yeCreateString("das best meilleur score\n" ..
+		     "with more points that other players is:\n"..
+		     "[no name implemented yet] : " .. yeGetInt(hs),
+		  wid, "text");
+end
+
+function scoreInit(wid, eve, args)
+   -- Get the score from the snake module
+   local hs = ygFileToEnt(YJSON, "phs-hightscore.json")
+   local scoreStrEntity = yeGet(wid, "text")
+   --yeSetString(scoreStrEntity, yeGetString(scoreStrEntity) .. score)
+   local scoreStr = yeGetString(scoreStrEntity) .. score
+
+   if (yeGetInt(hs) > score) then
+      scoreStr = scoreStr .. "\nhightscore:" .. yeGetInt(hs)
+   else
+      scoreStr = scoreStr .. "\nnew Hightscore !"
+      local scoreEnt = yeCreateInt(score)
+      ygEntToFile(YJSON, "phs-hightscore.json", scoreEnt)
+      yeDestroy(scoreEnt)
+   end
+   yeSetString(yeGet(wid, "text"), scoreStr)
+   yeDestroy(hs)
+end
+
 function init(mod)
    local map = yeCreateArray(mod, "game")
    yuiRandInit()
@@ -343,5 +368,7 @@ function init(mod)
    local init = yeCreateArray()
    yeCreateString("phs", init, "name")
    yeCreateFunction("initPhsWidget", init, "callback")
+   yeCreateFunction("scoreInit", mod, "scoreInit")
+   yeCreateFunction("getHightscore", mod, "getHightscore")
    ywidAddSubType(init)
 end
