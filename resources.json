@@ -9,4 +9,5 @@
     { "img" : "assets/Skorpio_Pack/Characters/Agent/AgentWalk.png", "img-src-rect": [16, 140, 32, 55]},
     { "img" : "assets/burger.png", "img-src-rect": [0, 0, 33, 33]},
 
+    { "img" : "assets/Skorpio_Pack/Characters/Character 1/Hurt/Character1Hurt.png", "img-src-rect": [15, 10, 32, 55]}
 ]
