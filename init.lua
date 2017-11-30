@@ -235,7 +235,7 @@ function meatCharmingGuy(entity)
    "Sara: hummm this guy has devinitively a good flirting thenique, I will give him my number")
    niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
    yeDestroy(txt)
-   score = score - 2
+   score = score - 3
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    ywPosSet(pbs, ywPosX(pbs) - 2, ywPosY(pbs))
 end
@@ -280,15 +280,15 @@ end
 
 function createObstacle(entity)
    local garbage
-   local nb = yuiRand() % 8
+   local nb = yuiRand() % 9
 
-   if nb <= 4 then
+   if nb <= 5 then
       garbage = createGarbage(entity)
-   elseif nb == 5 then
-      garbage = createSuiteGuy(entity)
    elseif nb == 6 then
-      garbage = createAntiPukePile(entity)
+      garbage = createSuiteGuy(entity)
    elseif nb == 7 then
+      garbage = createAntiPukePile(entity)
+   elseif nb == 8 then
       garbage = createCharmingGuy(entity)
    end
 
