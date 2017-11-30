@@ -102,8 +102,8 @@ function phsAction(entity, eve, arg)
       if saraSong then
 	 ywCanvasRemoveObj(entity, saraSong)
       end
-      local txt = yeCreateString("Sara: I'm actually trowing back everyting I've drink on myself\n"..
-      "but devlopers are too lazy to give me a puking real animation")
+      local txt = yeCreateString("Sara: I'm presently throwing back everyting I've drink on myself\n"..
+      "but developers are too lazy to give me a proper puking animation")
       niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
       yeDestroy(txt)
 
@@ -169,7 +169,7 @@ function phsAction(entity, eve, arg)
 	    "you can get it now\n" ..
 	    "attack attack ore wa shenshi !\n" ..
 	    "kikoeru ka ? kikoeru ka yo ?\n" ..
-	    "show me the way to youm lead me nowhere you are Heavy Metal !"
+	    "show me the way to you lead me nowhere you are Heavy Metal !"
       end
       local txt = yeCreateString(songtxt)
       if saraSong then
@@ -200,7 +200,7 @@ function moveObstacles(entity)
 end
 
 function dealDomage(entity, obstacle)
-   local txt = yeCreateString("Sara: Ohh a giant trash attack me, go away pile of trash")
+   local txt = yeCreateString("Sara: Ohh a giant trash bin attacks me, go away pile of trash")
    niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
    yeDestroy(txt)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
@@ -231,7 +231,7 @@ function createSuiteGuy(entity)
 end
 
 function eatBurger(entity, obstacle)
-   local txt = yeCreateString("Sara: mum mum, some anti vomit piles, American gastronomie is soo Good !")
+   local txt = yeCreateString("Sara: yum yum, some anti vomit pills, American gastronomy is soo Good !")
    if (niceGuyText2) then
       ywCanvasRemoveObj(entity, obstacle)
    end
@@ -244,10 +244,11 @@ function eatBurger(entity, obstacle)
 end
 
 function createAntiPukePile(entity)
-   local txt = yeCreateString("Burger !!!")
-   ret = ywCanvasNewText(entity, yuiRand() % 600, -70, txt)
-   yeDestroy(txt)
-
+--   local txt = yeCreateString("Burger !!!")
+--   ret = ywCanvasNewText(entity, yuiRand() % 600, -70, txt)
+--   yeDestroy(txt)
+   local ret = ywCanvasNewObj(entity, yuiRand() % 600, -70, 8)
+   
    yeCreateFunction("eatBurger", ret, "onTouch")
    return ret
 end
