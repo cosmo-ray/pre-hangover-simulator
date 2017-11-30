@@ -72,7 +72,33 @@ here's you're patetic score: ",
     "credit" : {
 	"<type>" : "text-screen",
 	"text" :
-	"TODO",
+	"Sprite Sara(CC-BY 3.0):
+Stephen 'Redshrike' Challener: graphic artist
+William Thompson: Contributor
+Mandi Paugh: original artist of Sara
+https://opengameart.org
+https://opengameart.org/content/lpc-sara
+
+Sprite Burger(?): ?(?)
+
+Other Sprites(CC-BY-SA 3.0) : Skorpio
+https://opengameart.org/users/skorpio
+https://opengameart.org/content/lpc-skorpios-scifi-sprite-pack
+
+Music:
+https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
+https://opengameart.org/users/sketchylogic
+
+Backgroune image and Game Devlopement: Arthur Robein (email ?)
+Game and engine Devlopement: Matthias Gatto (uso.cosmo.ray@gmail.com)
+
+PS: if you want to copy past links: emacs main.json,
+grep http ./main.json or whatever methode you have to read a file
+PPS: but if you don't use emacs you're wrong
+PPPS: well you can use vim or kakoun, it's still not totaly wrong
+PPPPS: if you want an easy to learn emacs, use spaceemacs:
+http://spacemacs.org/
+",
 	"text-align": "center",
 	"action" : "nextOnKeyDown",
 	"next" : "phs:scenes.main",

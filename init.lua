@@ -318,7 +318,7 @@ function initPhsWidget(entity)
    saraSongDuration = 0
    isDieying = -1
 
-   ySoundPlay(ySoundLoad("sara_song.mp3"))
+   ySoundPlayLoop(ySoundLoad("./Mars.wav"))
    yeCreateString("rgba: 0 0 0 255", entity, "background")
    yeCreateFunction("phsAction", entity, "action")
    yeCreateInt(100000, entity, "turn-length")
