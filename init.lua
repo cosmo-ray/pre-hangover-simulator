@@ -208,6 +208,9 @@ end
 
 function dealDomage(entity, obstacle)
    local txt = yeCreateString("Sara: Ohh a giant trash bin attacks me, go away pile of trash")
+   if niceGuyText then
+      ywCanvasRemoveObj(entity, niceGuyText)
+   end
    niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
    yeDestroy(txt)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
@@ -223,6 +226,9 @@ end
 
 function meatNiceGuy(entity)
    local txt = yeCreateString("Nice Guy: You want some orange juice ?, here's some Orange Juice")
+   if niceGuyText then
+      ywCanvasRemoveObj(entity, niceGuyText)
+   end
    niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
    yeDestroy(txt)
    score = score + 2
@@ -233,6 +239,9 @@ end
 function meatCharmingGuy(entity)
    local txt = yeCreateString("Charming Guy: hejj ! you'e cute mademoiselle, give me you +336 so you can drink orange juice at my home\n"..
    "Sara: hummm this guy has devinitively a good flirting thenique, I will give him my number")
+   if niceGuyText then
+      ywCanvasRemoveObj(entity, niceGuyText)
+   end
    niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
    yeDestroy(txt)
    score = score - 3
@@ -321,7 +330,7 @@ function initPhsWidget(entity)
    ySoundPlayLoop(ySoundLoad("./Mars.wav"))
    yeCreateString("rgba: 0 0 0 255", entity, "background")
    yeCreateFunction("phsAction", entity, "action")
-   yeCreateInt(100000, entity, "turn-length")
+   yeCreateInt(50000, entity, "turn-length")
    local objs = yeCreateArray(entity, "objs");
 
    local screenH = 480
