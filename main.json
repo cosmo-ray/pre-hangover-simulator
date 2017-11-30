@@ -29,7 +29,7 @@
 	],
 	"text-align" : "center",
 	"text-color" : "rgba: 255 100 255 255",
-	"background" : "main screen.png"
+	"background" : "photo_bar.jpg"
     },
     "story" : {
 	"<type>" : "text-screen",
