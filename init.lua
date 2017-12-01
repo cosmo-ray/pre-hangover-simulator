@@ -145,7 +145,7 @@ function phsAction(entity, eve, arg)
 
    if (ywPosX(pbs) >= 550  and saraSongDuration == 0) then
       local songtxt = "Sara: arkk, let's sing\n"
-      local randNb = yuiRand() % 4
+      local randNb = yuiRand() % 5
       if randNb == 0 then
 	 songtxt = songtxt ..
 	    "spam spam spam spam, lovely spam, wonderful spam"
@@ -167,6 +167,11 @@ function phsAction(entity, eve, arg)
 	    "attack attack ore wa shenshi !\n" ..
 	    "kikoeru ka ? kikoeru ka yo ?\n" ..
 	    "show me the way to you lead me nowhere you are Heavy Metal !"
+      elseif randNb == 4 then
+	 songtxt = songtxt ..
+	    "Oh you drink my orange juice\n" ..
+	    "La lalala lalalala lalalala\n" ..
+	    "I'ts creazy creazy night, havin orange here by my side!\n"
       end
       local txt = yeCreateString(songtxt)
       if saraSong then
