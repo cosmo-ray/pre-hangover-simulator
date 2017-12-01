@@ -41,14 +41,14 @@
 	"text" :
 	"You are Sara, great idol of opengameart.com
 As any Idol, you do what every idol do
-(not taking drug obviously, this game is for everyone)
+(not taking drugs obviously, this game is for everyone)
 You are drinking orange juice, with your friend Ruby
 After drinking 1.667 little of Orange Juice,
-barly the time to say abro kadabra and Ruby left you...
-you are drunk, you you're home is Faro...way
+barely the time to say Abro kadabra and Ruby left you...
+you are drunk, you you're home is so Faro...way
 
 PS: on the way back home, please:
-don't trow back everything you've drink on yourself",
+don't throwback everything you've drink on yourself",
 	"text-align": "center",
 	"action" : "nextOnKeyDown",
 	"next" : "phs:scenes.main",
@@ -57,13 +57,13 @@ don't trow back everything you've drink on yourself",
     "lose" : {
 	"<type>" : "text-screen",
 	"text" :
-	"you lose, like really lose, sara puke on herself because of you
+	"You lose, like really lose, sara puked on herself because of you
 you are a disrespect to Sara and what opengameart ever try to acomplish
 you should stop playing video game
-go forget you're patetic life
-by drinking cheap russian orange juice make of patatoes
+go forget you're pathetic life
+drinking cheap russian orange juice made out of patatoes
 Oh and if you're still wondering
-here's you're patetic score: ",
+here's you're pathetic score: ",
 	"text-align": "center",
 	"action" : "QuitOnKeyDown",
 	"init" : "phs:scoreInit",
@@ -79,7 +79,8 @@ Mandi Paugh: original artist of Sara
 https://opengameart.org
 https://opengameart.org/content/lpc-sara
 
-Sprite Burger(?): ?(?)
+Burger Sprite: Pixel Cafe
+https://piq.codeus.net/picture/172648/burger
 
 Other Sprites(CC-BY-SA 3.0) : Skorpio
 https://opengameart.org/users/skorpio
@@ -89,10 +90,10 @@ Music:
 https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
 https://opengameart.org/users/sketchylogic
 
-Backgroune image and Game Devlopement: Arthur Robein (email ?)
-Game and engine Devlopement: Matthias Gatto (uso.cosmo.ray@gmail.com)
+Background image and Game Developement: Arthur Robein (arthur.robein@gmail.com)
+Game and engine Developement: Matthias Gatto (uso.cosmo.ray@gmail.com)
 
-PS: if you want to copy past links: emacs main.json,
+PS: if you want to copy paste links: emacs main.json,
 grep http ./main.json or whatever methode you have to read a file
 PPS: but if you don't use emacs you're wrong
 PPPS: well you can use vim or kakoun, it's still not totaly wrong
