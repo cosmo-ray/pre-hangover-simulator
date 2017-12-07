@@ -41,9 +41,9 @@ function moveSara(entity, eve, objs)
    end
 end
 
-function checkColisions(entity)
+function checkCollisions(entity)
    local sara = yeGet(entity, "sara")
-   local touchBySara = ywCanvasNewColisionsArray(entity, sara)
+   local touchBySara = ywCanvasNewCollisionsArray(entity, sara)
    for i = 0, yeLen(touchBySara) do
       local touched = yeGet(touchBySara, i)
       if yeGetInt(yeGet(touched, "type")) == 1 then
@@ -118,7 +118,7 @@ function phsAction(entity, eve, arg)
    ywPosSet(pbs, ywPosX(pbs) + 1, ywPosY(pbs))
    moveObstacles(entity)
    moveSara(entity, eve, objs)
-   checkColisions(entity)
+   checkCollisions(entity)
    local pos = ywPosCreate(0, BASE_SCROLL_SPEED)
    local curPos = yeGet(yeGet(objs, 0), "pos")
    yeDestroy(pos)
@@ -311,7 +311,7 @@ function createObstacle(entity)
    end
 
    yeCreateInt(1, garbage, "type")
-   local touchByGarbage = ywCanvasNewColisionsArray(entity, garbage)
+   local touchByGarbage = ywCanvasNewCollisionsArray(entity, garbage)
    for i = 0, yeLen(touchByGarbage) do
       local touched = yeGet(touchByGarbage, i)
       if yeGetInt(yeGet(touched, "type")) == 1 then
