@@ -97,7 +97,9 @@ function phsAction(entity, eve, arg)
 
    if (isDieying >= 0) then
       if isDieying == 0 then
+	 cleanPhs(entity)
 	 yCallNextWidget(entity);
+	 return YEVE_ACTION
       end
       if saraSong then
 	 ywCanvasRemoveObj(entity, saraSong)
@@ -287,11 +289,8 @@ function eatBurger(entity, obstacle)
 end
 
 function createAntiPukePile(entity)
---   local txt = yeCreateString("Burger !!!")
---   ret = ywCanvasNewText(entity, yuiRand() % 600, -70, txt)
---   yeDestroy(txt)
    local ret = ywCanvasNewObj(entity, yuiRand() % 600, -70, 8)
-   
+
    yeCreateFunction("eatBurger", ret, "onTouch")
    return ret
 end
@@ -322,6 +321,16 @@ function createObstacle(entity)
    yePushBack(yeGet(entity, "obstacles"), garbage)
 end
 
+function cleanPhs(entity)
+   ySoundStop(soundId)
+   yeRemoveChild(entity, "objs")
+   yeRemoveChild(entity, "sara")
+   yeRemoveChild(entity, "obstacles")
+   yeRemoveChild(entity, "road-end-idx")
+   yeRemoveChild(entity, "scoreTxt")
+   yeRemoveChild(entity, "pukeBar")
+end
+
 function initPhsWidget(entity)
    moveUp = 0
    moveDown = 0
@@ -335,13 +344,17 @@ function initPhsWidget(entity)
    saraSong = nil
    saraSongDuration = 0
    isDieying = -1
+   local isInit = yeGet(entity, "isInit")
 
-   ySoundPlayLoop(ySoundLoad("./Mars.wav"))
-   yeCreateString("rgba: 0 0 0 255", entity, "background")
-   yeCreateFunction("phsAction", entity, "action")
-   yeCreateInt(50000, entity, "turn-length")
+   soundId = ySoundLoad("./Mars.wav")
+   ySoundPlayLoop(soundId)
+   if (yeGetInt(isInit) == 0) then
+      yeCreateString("rgba: 0 0 0 255", entity, "background")
+      yeCreateFunction("phsAction", entity, "action")
+      yeCreateInt(50000, entity, "turn-length")
+   end
+
    local objs = yeCreateArray(entity, "objs");
-
    local screenH = 480
    local idx = -70;
    while idx < screenH do
@@ -372,6 +385,7 @@ function initPhsWidget(entity)
    yePushBack(entity, obj, "pukeBar")
 
    local canvas = ywidNewWidget(entity, "canvas")
+   yeCreateInt(1, entity, "isInit")
    return canvas
 end
 

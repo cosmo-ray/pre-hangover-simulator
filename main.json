@@ -65,7 +65,8 @@ drinking cheap russian orange juice made out of patatoes
 Oh and if you're still wondering
 here's you're pathetic score: ",
 	"text-align": "center",
-	"action" : "QuitOnKeyDown",
+	"action" : "nextOnKeyDown",
+	"next" : "phs:scenes.main",
 	"init" : "phs:scoreInit",
 	"background" : "rgba: 255 255 255 255"
     },
