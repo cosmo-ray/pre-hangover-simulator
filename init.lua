@@ -51,7 +51,6 @@ function checkCollisions(entity)
         local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
       end
    end
-   --print(touchBySara, yeLen(touchBySara))
 end
 
 function phsAction(entity, eve, arg)
@@ -376,13 +375,12 @@ function initPhsWidget(entity)
    yeDestroy(scoreText)
    ywCanvasNewText(entity, 10, 5, scoreTxtEnt)
 
-   local obj = yeCreateArray(objs)
-   yeCreateInt(1, obj)
-   ywPosCreate(10, 20, obj)
-   local rect = yeCreateArray(obj)
+   local rect = yeCreateArray()
    ywPosCreate(10, 10, rect)
    yeCreateString("rgba: 180 50 10 160", rect)
+   obj = ywCanvasNewRect(entity, 10, 20, rect)
    yePushBack(entity, obj, "pukeBar")
+   yeDestroy(rect)
 
    local canvas = ywidNewWidget(entity, "canvas")
    yeCreateInt(1, entity, "isInit")
