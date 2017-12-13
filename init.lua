@@ -48,9 +48,9 @@ function checkCollisions(entity)
       local touched = yeGet(touchBySara, i)
       if yeGetInt(yeGet(touched, "type")) == 1 then
 	 yesCall(yeGet(touched, "onTouch"), entity, touched)
-        local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
       end
    end
+   yeDestroy(touchBySara)
 end
 
 function phsAction(entity, eve, arg)
@@ -58,7 +58,11 @@ function phsAction(entity, eve, arg)
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
 
    while ywidEveIsEnd(eve) == false do
-      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Q_KEY then yFinishGame() end
+      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Q_KEY then
+	 yFinishGame()
+	 cleanPhs(entity)
+	 return YEVE_ACTION
+      end
       if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_UP_KEY then moveUp = 1 end
       if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 1 end
       if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 1 end
@@ -120,9 +124,8 @@ function phsAction(entity, eve, arg)
    moveObstacles(entity)
    moveSara(entity, eve, objs)
    checkCollisions(entity)
-   local pos = ywPosCreate(0, BASE_SCROLL_SPEED)
+   local pos = nil
    local curPos = yeGet(yeGet(objs, 0), "pos")
-   yeDestroy(pos)
    if ywPosY(curPos) % 70 == 0 and ywPosY(curPos) > -70 then
       local pos = ywPosCreate(0, -65 - ywPosY(curPos))
    else
@@ -142,9 +145,7 @@ function phsAction(entity, eve, arg)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    if  ywPosX(pbs) >= 620 then
       isDieying = 40
-   end
-
-   if (ywPosX(pbs) >= 550  and saraSongDuration == 0) then
+   elseif (ywPosX(pbs) >= 550  and saraSongDuration == 0) then
       local songtxt = "Sara: arkk, let's sing\n"
       local randNb = yuiRand() % 5
       if randNb == 0 then
@@ -203,8 +204,8 @@ function moveObstacles(entity)
 
       if obstacleIdx ~= -1 then
 	 ywCanvasMoveObjByIdx(entity, obstacleIdx, pos)
-	 yeDestroy(pos)
       end
+      yeDestroy(pos)
       if ywPosY(ywCanvasObjPos(obstacle)) > 500 then
 	 ywCanvasRemoveObj(entity, obstacle)
 	 yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
@@ -317,6 +318,7 @@ function createObstacle(entity)
 	 return
       end
    end
+   yeDestroy(touchByGarbage)
    yePushBack(yeGet(entity, "obstacles"), garbage)
 end
 
