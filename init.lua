@@ -1,4 +1,9 @@
+local A_KEY = 97
+local D_KEY = 100
 local Q_KEY = 113
+local S_KEY = 115
+local W_KEY = 119
+local Z_KEY = 122
 local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
 local OBSTACLE_DENSITY = 10
@@ -58,20 +63,34 @@ function phsAction(entity, eve, arg)
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
 
    while ywidEveIsEnd(eve) == false do
-      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Q_KEY then
-	 yFinishGame()
-	 cleanPhs(entity)
-	 return YEVE_ACTION
+      if ywidEveType(eve) == YKEY_DOWN then
+	 if ywidEveKey(eve) == Y_ESC_KEY then
+	    yFinishGame()
+	    cleanPhs(entity)
+	 end
+	 if ywidEveKey(eve) == Y_UP_KEY then moveUp = 1 end
+	 if ywidEveKey(eve) == W_KEY then moveUp = 1 end
+	 if ywidEveKey(eve) == Z_KEY then moveUp = 1 end
+	 if ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 1 end
+	 if ywidEveKey(eve) == S_KEY then moveDown = 1 end
+	 if ywidEveKey(eve) == A_KEY then moveLeft = 1 end
+	 if ywidEveKey(eve) == Q_KEY then moveLeft = 1 end
+	 if ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 1 end
+	 if ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 1 end
+	 if ywidEveKey(eve) == D_KEY then moveRight = 1 end
       end
-      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_UP_KEY then moveUp = 1 end
-      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 1 end
-      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 1 end
-      if ywidEveType(eve) == YKEY_DOWN and ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 1 end
-      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_UP_KEY then moveUp = 0 end
-      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 0 end
-      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 0 end
-      if ywidEveType(eve) == YKEY_UP and ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 0 end
-
+      if ywidEveType(eve) == YKEY_UP then
+	 if ywidEveKey(eve) == W_KEY then moveUp = 0 end
+	 if ywidEveKey(eve) == Z_KEY then moveUp = 0 end
+	 if ywidEveKey(eve) == S_KEY then moveDown = 0 end
+	 if ywidEveKey(eve) == Y_UP_KEY then moveUp = 0 end
+	 if ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 0 end
+	 if ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 0 end
+	 if ywidEveKey(eve) == A_KEY then moveLeft = 0 end
+	 if ywidEveKey(eve) == Q_KEY then moveLeft = 0 end
+	 if ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 0 end
+	 if ywidEveKey(eve) == D_KEY then moveRight = 0 end
+      end
       eve = ywidNextEve(eve)
    end
 
