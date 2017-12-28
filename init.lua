@@ -210,6 +210,7 @@ function moveObstacles(entity)
 	 ywCanvasRemoveObj(entity, obstacle)
 	 yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
       end
+      yeDestroy(pos)
    end
 end
 
@@ -323,6 +324,18 @@ function createObstacle(entity)
 end
 
 function cleanPhs(entity)
+   if (niceGuyText) then
+      ywCanvasRemoveObj(entity, niceGuyText)
+      niceGuyText = nil
+   end
+   if saraSongDuration == 0 then
+      ywCanvasRemoveObj(entity, saraSong)
+      saraSong = nil
+   end
+   if niceGuyText2 then
+      ywCanvasRemoveObj(entity, niceGuyText2)
+      niceGuyText2 = nil
+   end
    ySoundStop(soundId)
    yeRemoveChild(entity, "objs")
    yeRemoveChild(entity, "sara")
