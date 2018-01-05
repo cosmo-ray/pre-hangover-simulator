@@ -1,9 +1,3 @@
-local A_KEY = 97
-local D_KEY = 100
-local Q_KEY = 113
-local S_KEY = 115
-local W_KEY = 119
-local Z_KEY = 122
 local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
 local OBSTACLE_DENSITY = 10
@@ -18,6 +12,13 @@ function createStreetLine(wid, idx)
    end
    ywCanvasNewObj(wid, 500, idx, 2)
    ywCanvasNewObj(wid, 570, idx, 0)
+end
+
+function isColisionable(wid, obj)
+   if yeGetInt(yeGet(obj, "type")) == 1 then
+      return Y_TRUE
+   end
+   return Y_FALSE
 end
 
 function moveSara(entity, eve, objs)
@@ -48,12 +49,12 @@ end
 
 function checkCollisions(entity)
    local sara = yeGet(entity, "sara")
-   local touchBySara = ywCanvasNewCollisionsArray(entity, sara)
+   local touchBySara = ywCanvasNewCollisionsArrayExt(entity,
+						     sara, isColisionableEntity)
+
    for i = 0, yeLen(touchBySara) do
       local touched = yeGet(touchBySara, i)
-      if yeGetInt(yeGet(touched, "type")) == 1 then
-	 yesCall(yeGet(touched, "onTouch"), entity, touched)
-      end
+      yesCall(yeGet(touched, "onTouch"), entity, touched)
    end
    yeDestroy(touchBySara)
 end
@@ -69,27 +70,27 @@ function phsAction(entity, eve, arg)
 	    cleanPhs(entity)
 	 end
 	 if ywidEveKey(eve) == Y_UP_KEY then moveUp = 1 end
-	 if ywidEveKey(eve) == W_KEY then moveUp = 1 end
-	 if ywidEveKey(eve) == Z_KEY then moveUp = 1 end
+	 if ywidEveKey(eve) == Y_W_KEY then moveUp = 1 end
+	 if ywidEveKey(eve) == Y_Z_KEY then moveUp = 1 end
 	 if ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 1 end
-	 if ywidEveKey(eve) == S_KEY then moveDown = 1 end
-	 if ywidEveKey(eve) == A_KEY then moveLeft = 1 end
-	 if ywidEveKey(eve) == Q_KEY then moveLeft = 1 end
+	 if ywidEveKey(eve) == Y_S_KEY then moveDown = 1 end
+	 if ywidEveKey(eve) == Y_A_KEY then moveLeft = 1 end
+	 if ywidEveKey(eve) == Y_Q_KEY then moveLeft = 1 end
 	 if ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 1 end
 	 if ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 1 end
-	 if ywidEveKey(eve) == D_KEY then moveRight = 1 end
+	 if ywidEveKey(eve) == Y_D_KEY then moveRight = 1 end
       end
       if ywidEveType(eve) == YKEY_UP then
-	 if ywidEveKey(eve) == W_KEY then moveUp = 0 end
-	 if ywidEveKey(eve) == Z_KEY then moveUp = 0 end
-	 if ywidEveKey(eve) == S_KEY then moveDown = 0 end
+	 if ywidEveKey(eve) == Y_W_KEY then moveUp = 0 end
+	 if ywidEveKey(eve) == Y_Z_KEY then moveUp = 0 end
+	 if ywidEveKey(eve) == Y_S_KEY then moveDown = 0 end
 	 if ywidEveKey(eve) == Y_UP_KEY then moveUp = 0 end
 	 if ywidEveKey(eve) == Y_DOWN_KEY then moveDown = 0 end
 	 if ywidEveKey(eve) == Y_LEFT_KEY then moveLeft = 0 end
-	 if ywidEveKey(eve) == A_KEY then moveLeft = 0 end
-	 if ywidEveKey(eve) == Q_KEY then moveLeft = 0 end
+	 if ywidEveKey(eve) == Y_A_KEY then moveLeft = 0 end
+	 if ywidEveKey(eve) == Y_Q_KEY then moveLeft = 0 end
 	 if ywidEveKey(eve) == Y_RIGHT_KEY then moveRight = 0 end
-	 if ywidEveKey(eve) == D_KEY then moveRight = 0 end
+	 if ywidEveKey(eve) == Y_D_KEY then moveRight = 0 end
       end
       eve = ywidNextEve(eve)
    end
@@ -330,13 +331,10 @@ function createObstacle(entity)
    end
 
    yeCreateInt(1, garbage, "type")
-   local touchByGarbage = ywCanvasNewCollisionsArray(entity, garbage)
-   for i = 0, yeLen(touchByGarbage) do
-      local touched = yeGet(touchByGarbage, i)
-      if yeGetInt(yeGet(touched, "type")) == 1 then
-	 yeRemoveChild(yeGet(entity, "objs"), garbage)
-	 return
-      end
+
+   if ywCanvasCheckCollisions(entity, garbage, isColisionableEntity) == 1 then
+      ywCanvasRemoveObj(entity, garbage);
+      return
    end
    yeDestroy(touchByGarbage)
    yePushBack(yeGet(entity, "obstacles"), garbage)
@@ -460,5 +458,7 @@ function init(mod)
    yeCreateFunction("initPhsWidget", init, "callback")
    yeCreateFunction("scoreInit", mod, "scoreInit")
    yeCreateFunction("getHightscore", mod, "getHightscore")
+   isColisionableEntity =  yeCreateFunction("isColisionable", mod,
+					    "isColisionable")
    ywidAddSubType(init)
 end
