@@ -14,8 +14,9 @@ function createStreetLine(wid, idx)
    ywCanvasNewObj(wid, 570, idx, 0)
 end
 
-function isColisionable(wid, obj)
-   if yeGetInt(yeGet(obj, "type")) == 1 then
+function isColisionable(wid, obj, obj2)
+   if yeGetInt(yeGet(obj, "type")) == 1 and
+   ywCanvasObjectsCheckColisions(obj, obj2) then
       return Y_TRUE
    end
    return Y_FALSE
@@ -147,9 +148,9 @@ function phsAction(entity, eve, arg)
    local pos = nil
    local curPos = yeGet(yeGet(objs, 0), "pos")
    if ywPosY(curPos) % 70 == 0 and ywPosY(curPos) > -70 then
-      local pos = ywPosCreate(0, -65 - ywPosY(curPos))
+      pos = ywPosCreate(0, -65 - ywPosY(curPos))
    else
-      local pos = ywPosCreate(0, BASE_SCROLL_SPEED)
+      pos = ywPosCreate(0, BASE_SCROLL_SPEED)
    end
    local idx = 0
    while (idx < endRoad) do
@@ -201,15 +202,23 @@ function phsAction(entity, eve, arg)
       end
       if niceGuyText2 then
 	 ywCanvasRemoveObj(entity, niceGuyText2)
+	 niceGuyText2 = nil
       end
       if niceGuyText then
 	 ywCanvasRemoveObj(entity, niceGuyText)
+	 niceGuyText = nil
       end
       saraSongDuration = 40
       saraSong = ywCanvasNewText(entity, 70, 120, txt)
       yeDestroy(txt)
    end
 
+   ywCanvasSwapObj(entity, yeGet(entity, "scoreObj"),
+		   ywCanvasObjFromIdx(entity, -1))
+   ywCanvasSwapObj(entity, yeGet(entity, "pukeTxtObj"),
+		   ywCanvasObjFromIdx(entity, -2))
+   ywCanvasSwapObj(entity, yeGet(entity, "pukeBar"),
+		   ywCanvasObjFromIdx(entity, -3))
    return YEVE_ACTION
 end
 
@@ -382,7 +391,7 @@ function initPhsWidget(entity)
    if (yeGetInt(isInit) == 0) then
       yeCreateString("rgba: 0 0 0 255", entity, "background")
       yeCreateFunction("phsAction", entity, "action")
-      yeCreateInt(50000, entity, "turn-length")
+      yeCreateInt(60000, entity, "turn-length")
    end
 
    local objs = yeCreateArray(entity, "objs");
@@ -401,11 +410,12 @@ function initPhsWidget(entity)
    createObstacle(entity)
    local scoreText = "score " .. score
    local scoreTxtEnt = yeCreateString(scoreText, entity, "scoreTxt")
-   ywCanvasNewText(entity, 10, 30, scoreTxtEnt)
-
+   local obj = ywCanvasNewText(entity, 10, 30, scoreTxtEnt)
+   yePushBack(entity, obj, "scoreObj")
    scoreTxtEnt = yeCreateString("Puking Bar, also know as Vomit Bar")
    yeDestroy(scoreText)
-   ywCanvasNewText(entity, 10, 5, scoreTxtEnt)
+   obj = ywCanvasNewText(entity, 10, 5, scoreTxtEnt)
+   yePushBack(entity, obj, "pukeTxtObj")
 
    local rect = yeCreateArray()
    ywPosCreate(10, 10, rect)
@@ -433,17 +443,14 @@ function scoreInit(wid, eve, args)
    local hs = ygFileToEnt(YJSON, "phs-hightscore.json")
    local scoreStrEntity = yeGet(wid, "text")
    --yeSetString(scoreStrEntity, yeGetString(scoreStrEntity) .. score)
-   local scoreStr = yeGetString(scoreStrEntity) .. score
 
-   if (yeGetInt(hs) > score) then
-      scoreStr = scoreStr .. "\nhightscore:" .. yeGetInt(hs)
-   else
-      scoreStr = scoreStr .. "\nnew Hightscore !"
+   if (yeGetInt(hs) <= score) then
       local scoreEnt = yeCreateInt(score)
       ygEntToFile(YJSON, "phs-hightscore.json", scoreEnt)
       yeDestroy(scoreEnt)
    end
-   yeSetString(yeGet(wid, "text"), scoreStr)
+   ygSetInt("phs-score", score)
+   ygSetInt("phs-hs", yeGetInt(hs))
    yeDestroy(hs)
 end
 

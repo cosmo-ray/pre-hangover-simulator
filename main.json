@@ -63,8 +63,10 @@ you should stop playing video game
 go forget you're pathetic life
 drinking cheap russian orange juice made out of patatoes
 Oh and if you're still wondering
-here's you're pathetic score: ",
+here's you're pathetic score: {phs-score}
+HightScore {phs-hs}",
 	"text-align": "center",
+	"fmt": "yirl",
 	"action" : "nextOnKeyDown",
 	"next" : "phs:scenes.main",
 	"init" : "phs:scoreInit",
