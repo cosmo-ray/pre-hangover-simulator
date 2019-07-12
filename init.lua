@@ -63,6 +63,7 @@ end
 function phsAction(entity, eve, arg)
    local objs = yeGet(entity, "objs")
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
+   ygModDir("phs");
 
    while ywidEveIsEnd(eve) == false do
       if ywidEveType(eve) == YKEY_DOWN then
@@ -123,6 +124,7 @@ function phsAction(entity, eve, arg)
       if isDieying == 0 then
 	 cleanPhs(entity)
 	 yCallNextWidget(entity);
+	 ygModDirOut()
 	 return YEVE_ACTION
       end
       if saraSong then
@@ -135,6 +137,7 @@ function phsAction(entity, eve, arg)
 
       isDieying = isDieying - 1
       ywCanvasObjSetResourceId(yeGet(entity, "sara"), yuiRand() % 6)
+      ygModDirOut()
       return YEVE_ACTION
    end
    if (turnNb + (yuiRand() % (OBSTACLE_DENSITY / 2))) % OBSTACLE_DENSITY == 0 then
@@ -219,6 +222,7 @@ function phsAction(entity, eve, arg)
 		   ywCanvasObjFromIdx(entity, -2))
    ywCanvasSwapObj(entity, yeGet(entity, "pukeBar"),
 		   ywCanvasObjFromIdx(entity, -3))
+   ygModDirOut()
    return YEVE_ACTION
 end
 
@@ -386,6 +390,7 @@ function initPhsWidget(entity)
    isDieying = -1
    local isInit = yeGet(entity, "isInit")
 
+   ygModDir("phs");
    soundId = ySoundLoad("./Mars.wav")
    ySoundPlayLoop(soundId)
    if (yeGetInt(isInit) == 0) then
@@ -426,6 +431,7 @@ function initPhsWidget(entity)
 
    local canvas = ywidNewWidget(entity, "canvas")
    yeCreateInt(1, entity, "isInit")
+   ygModDirOut();
    return canvas
 end
 
