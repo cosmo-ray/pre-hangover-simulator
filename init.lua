@@ -2,16 +2,28 @@ local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
 local OBSTACLE_DENSITY = 10
 
+local function getStartXY(wid)
+   local x = (ywWidth(wid) - 600) / 2
+   local y = (ywHeight(wid) - 480) / 2
+
+   return x, y
+end
+
 function createStreetLine(wid, idx)
-   ywCanvasNewObj(wid, 0, idx, 0)
-   ywCanvasNewObj(wid, 70, idx, 1)
+   local x,y = getStartXY(wid)
+
+   print("idx:", idx)
+   idx = idx + y
+   print("idx2:", idx)
+   ywCanvasNewObj(wid, 0 + x, idx, 0)
+   ywCanvasNewObj(wid, 70 + x, idx, 1)
    jdx = 140
-   while jdx < 500 do
-      ywCanvasNewObj(wid, jdx, idx, 3)
+   while jdx < (500 + x) do
+      ywCanvasNewObj(wid, jdx + x, idx, 3)
       jdx = jdx + 60
    end
-   ywCanvasNewObj(wid, 500, idx, 2)
-   ywCanvasNewObj(wid, 570, idx, 0)
+   ywCanvasNewObj(wid, 500 + x, idx, 2)
+   ywCanvasNewObj(wid, 570 + x, idx, 0)
 end
 
 function isColisionable(wid, obj, obj2)
@@ -22,17 +34,18 @@ function isColisionable(wid, obj, obj2)
    return Y_FALSE
 end
 
-function moveSara(entity, eve, objs)
+function moveSara(entity)
+   local x, y = getStartXY(entity)
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
    local sara = yeGet(entity, "sara")
    local saraIdx = ywCanvasIdxFromObj(entity, sara)
    local curPos = ywCanvasObjPos(sara)
    local saraPos = ywPosCreate(BASE_CHAR_SPEED * moveRight - BASE_CHAR_SPEED * moveLeft,
 			       BASE_CHAR_SPEED * moveDown - BASE_CHAR_SPEED * moveUp)
-   if ywPosX(saraPos) + ywPosX(curPos) > 610 or ywPosX(saraPos) + ywPosX(curPos) < 0 then
+   if ywPosX(saraPos) + ywPosX(curPos) > (610 + x) or ywPosX(saraPos) + ywPosX(curPos) < (0 + x) then
       ywPosSet(saraPos, 0, ywPosY(saraPos))
    end
-   if ywPosY(saraPos) + ywPosY(curPos) > 430 or ywPosY(saraPos) + ywPosY(curPos) < 0 then
+   if ywPosY(saraPos) + ywPosY(curPos) > (430 + y) or ywPosY(saraPos) + ywPosY(curPos) < (0 + y) then
       ywPosSet(saraPos, ywPosX(saraPos), 0)
    end
    ywCanvasMoveObjByIdx(entity, saraIdx, saraPos)
@@ -61,7 +74,7 @@ function checkCollisions(entity)
 end
 
 function phsAction(entity, eve, arg)
-   local objs = yeGet(entity, "objs")
+   local x,y = getStartXY(entity)
    local endRoad = yeGetInt(yeGet(entity, "road-end-idx"))
    ygModDir("phs");
 
@@ -125,6 +138,7 @@ function phsAction(entity, eve, arg)
 	 cleanPhs(entity)
 	 yCallNextWidget(entity);
 	 ygModDirOut()
+	 yesCall(yeGet(wid, "end_callback"), wid, yeGet(wid, "end_callback_arg"))
 	 return YEVE_ACTION
       end
       if saraSong then
@@ -132,7 +146,7 @@ function phsAction(entity, eve, arg)
       end
       local txt = yeCreateString("Sara: I'm presently throwing back everyting I've drink on myself\n"..
       "but developers are too lazy to give me a proper puking animation")
-      niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
+      niceGuyText = ywCanvasNewText(entity, x + 50, y + 100, txt)
       yeDestroy(txt)
 
       isDieying = isDieying - 1
@@ -146,11 +160,13 @@ function phsAction(entity, eve, arg)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    ywPosSet(pbs, ywPosX(pbs) + 1, ywPosY(pbs))
    moveObstacles(entity)
-   moveSara(entity, eve, objs)
+   moveSara(entity)
    checkCollisions(entity)
    local pos = nil
+   local objs = yeGet(entity, "objs")
    local curPos = yeGet(yeGet(objs, 0), "pos")
-   if ywPosY(curPos) % 70 == 0 and ywPosY(curPos) > -70 then
+
+   if (ywPosY(curPos) - y) % 70 == 0 and (ywPosY(curPos) - y) > -70 then
       pos = ywPosCreate(0, -65 - ywPosY(curPos))
    else
       pos = ywPosCreate(0, BASE_SCROLL_SPEED)
@@ -167,9 +183,9 @@ function phsAction(entity, eve, arg)
    yeSetString(yeGet(entity, "scoreTxt"), "score " .. score)
 
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
-   if  ywPosX(pbs) >= 620 then
+   if  ywPosX(pbs) >= (620 + x) then
       isDieying = 40
-   elseif (ywPosX(pbs) >= 550  and saraSongDuration == 0) then
+   elseif (ywPosX(pbs) >= (550 + x)  and saraSongDuration == 0) then
       local songtxt = "Sara: arkk, let's sing\n"
       local randNb = yuiRand() % 5
       if randNb == 0 then
@@ -212,21 +228,22 @@ function phsAction(entity, eve, arg)
 	 niceGuyText = nil
       end
       saraSongDuration = 40
-      saraSong = ywCanvasNewText(entity, 70, 120, txt)
+      saraSong = ywCanvasNewText(entity, x + 70, y + 120, txt)
       yeDestroy(txt)
    end
 
    ywCanvasSwapObj(entity, yeGet(entity, "scoreObj"),
-		   ywCanvasObjFromIdx(entity, -1))
+		   ywCanvasObjFromIdx(entity, -4))
    ywCanvasSwapObj(entity, yeGet(entity, "pukeTxtObj"),
-		   ywCanvasObjFromIdx(entity, -2))
+		   ywCanvasObjFromIdx(entity, -5))
    ywCanvasSwapObj(entity, yeGet(entity, "pukeBar"),
-		   ywCanvasObjFromIdx(entity, -3))
+		   ywCanvasObjFromIdx(entity, -6))
    ygModDirOut()
    return YEVE_ACTION
 end
 
 function moveObstacles(entity)
+   local x,y = getStartXY(entity)
    local obstacles = yeGet(entity, "obstacles")
    local endObstacles = yeLen(obstacles)
 
@@ -239,7 +256,7 @@ function moveObstacles(entity)
 	 ywCanvasMoveObjByIdx(entity, obstacleIdx, pos)
       end
       yeDestroy(pos)
-      if ywPosY(ywCanvasObjPos(obstacle)) > 500 then
+      if ywPosY(ywCanvasObjPos(obstacle)) > 500 + y then
 	 ywCanvasRemoveObj(entity, obstacle)
 	 yeRemoveChild(yeGet(entity, "obstacles"), obstacle)
       end
@@ -248,30 +265,35 @@ function moveObstacles(entity)
 end
 
 function dealDomage(entity, obstacle)
+   local x,y = getStartXY(entity)
    local txt = yeCreateString("Sara: Ohh a giant trash bin attacks me, go away pile of trash")
    if niceGuyText then
       ywCanvasRemoveObj(entity, niceGuyText)
    end
-   niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
+   niceGuyText = ywCanvasNewText(entity, x + 50, y + 100, txt)
    yeDestroy(txt)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
    ywPosSet(pbs, ywPosX(pbs) + 30, ywPosY(pbs))
 end
 
 function createGarbage(entity)
-   local garbage = ywCanvasNewObj(entity, yuiRand() % 600, -70, 4)
+   local x, y = getStartXY(entity)
+   local garbage = ywCanvasNewObj(entity, x + yuiRand() % 600, -70 + y, 4)
 
    yeCreateFunction("dealDomage", garbage, "onTouch")
    return garbage
 end
 
 function meatNiceGuy(entity)
-   local txt = yeCreateString("Nice Guy: You want some orange juice ?, here's some Orange Juice\n"..
-			      "Sara: glou glou...")
+   local x,y = getStartXY(entity)
+   local txt = yeCreateString(
+      "Nice Guy: You want some orange juice ?, here's some Orange Juice\n"..
+	 "Sara: glou glou...")
+
    if niceGuyText then
       ywCanvasRemoveObj(entity, niceGuyText)
    end
-   niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
+   niceGuyText = ywCanvasNewText(entity, x + 50, y + 100, txt)
    yeDestroy(txt)
    score = score + 2
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
@@ -279,15 +301,17 @@ function meatNiceGuy(entity)
 end
 
 function meatCharmingGuy(entity)
-   local txt = yeCreateString("Charming Guy: hejj ! mademoiselle you'e cute, give me you phone(BURPP)\n"..
-			      "                I'll give you some free juice at my home\n"..
-			      "Sara: hummm this guy devinitively know how to talk to a girl\n"..
-			      "        I will absolutely give him my number")
+   local x,y = getStartXY(entity)
+   local txt = yeCreateString(
+      "Charming Guy: hejj ! mademoiselle you'e cute, give me you phone(BURPP)\n"..
+	 "                I'll give you some free juice at my home\n"..
+	 "Sara: hummm this guy devinitively know how to talk to a girl\n"..
+	 "        I will absolutely give him my number")
 
    if niceGuyText then
       ywCanvasRemoveObj(entity, niceGuyText)
    end
-   niceGuyText = ywCanvasNewText(entity, 50, 100, txt)
+   niceGuyText = ywCanvasNewText(entity, x + 50, y + 100, txt)
    yeDestroy(txt)
    score = score - 3
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
@@ -295,14 +319,16 @@ function meatCharmingGuy(entity)
 end
 
 function createSuiteGuy(entity)
-   local ret = ywCanvasNewObj(entity, yuiRand() % 600, -70, 7)
+   local x, y = getStartXY(entity)
+   local ret = ywCanvasNewObj(entity, yuiRand() % 600 + x, -70 + y, 7)
 
    yeCreateFunction("meatNiceGuy", ret, "onTouch")
    return ret
 end
 
 function createCharmingGuy(entity)
-   local ret = ywCanvasNewObj(entity, yuiRand() % 600, -70, 9)
+   local x, y = getStartXY(entity)
+   local ret = ywCanvasNewObj(entity, yuiRand() % 600 + x, y + -70, 9)
 
    yeCreateFunction("meatCharmingGuy", ret, "onTouch")
    return ret
@@ -310,6 +336,7 @@ end
 
 function eatBurger(entity, obstacle)
    local txt = yeCreateString("Sara: yum yum, some anti vomit pills, American gastronomy is soo Good !")
+
    if (niceGuyText2) then
       ywCanvasRemoveObj(entity, niceGuyText2)
    end
@@ -323,7 +350,8 @@ function eatBurger(entity, obstacle)
 end
 
 function createAntiPukePile(entity)
-   local ret = ywCanvasNewObj(entity, yuiRand() % 600, -70, 8)
+   local x,y = getStartXY(entity)
+   local ret = ywCanvasNewObj(entity, x + yuiRand() % 600, y + -70, 8)
 
    yeCreateFunction("eatBurger", ret, "onTouch")
    return ret
@@ -398,39 +426,60 @@ function initPhsWidget(entity)
       yeCreateFunction("phsAction", entity, "action")
       yeCreateInt(60000, entity, "turn-length")
    end
-
    local objs = yeCreateArray(entity, "objs");
+
+   local canvas = ywidNewWidget(entity, "canvas")
+   ywCanvasEnableWeight(entity)
+   local x, y = getStartXY(entity)
+
    local screenH = 480
    local idx = -70;
-   while idx < screenH do
+   while idx < (screenH + y) do
       createStreetLine(entity, idx)
       idx = idx + 70
    end
    yeCreateInt(yeLen(objs), entity, "road-end-idx")
    saraId = 6
-   local sara = ywCanvasNewObj(entity, 350, 250, saraId)
+   local sara = ywCanvasNewObj(entity, x + 350, y + 250, saraId)
    yePushBack(entity, sara, "sara")
    yeCreateArray(entity, "obstacles")
 
    createObstacle(entity)
-   local scoreText = "score " .. score
+   local scoreText = "score " .. score .. "    "
    local scoreTxtEnt = yeCreateString(scoreText, entity, "scoreTxt")
-   local obj = ywCanvasNewText(entity, 10, 30, scoreTxtEnt)
+   local obj = ywCanvasNewText(entity, x + 10, y + 30, scoreTxtEnt)
    yePushBack(entity, obj, "scoreObj")
    scoreTxtEnt = yeCreateString("Puking Bar, also know as Vomit Bar")
    yeDestroy(scoreText)
-   obj = ywCanvasNewText(entity, 10, 5, scoreTxtEnt)
+   obj = ywCanvasNewText(entity, x + 10, y +  5, scoreTxtEnt)
    yePushBack(entity, obj, "pukeTxtObj")
 
    local rect = yeCreateArray()
    ywPosCreate(10, 10, rect)
    yeCreateString("rgba: 180 50 10 160", rect)
-   obj = ywCanvasNewRect(entity, 10, 20, rect)
+   obj = ywCanvasNewRect(entity, x + 10, y + 20, rect)
    yePushBack(entity, obj, "pukeBar")
    yeDestroy(rect)
 
-   local canvas = ywidNewWidget(entity, "canvas")
+   print("s XY:", x, y)
    yeCreateInt(1, entity, "isInit")
+   print(ywWidth(entity), ywHeight(entity))
+   obj = ywCanvasNewRectangle(entity, 0, 0, ywWidth(entity),
+			      y, "rgba: 0 0 0 255")
+   yePushBack(entity, obj, "bg0")
+   ywCanvasSetWeight(entity, obj, 10);
+
+   obj = ywCanvasNewRectangle(entity, x + 0, y + 480, ywWidth(entity),
+			      ywHeight(entity) - 480, "rgba: 0 0 0 255")
+   yePushBack(entity, obj, "bg1")
+   ywCanvasSetWeight(entity, obj, 10);
+
+   obj = ywCanvasNewRectangle(entity, x + ywWidth(entity), y + 0,
+			      ywWidth(entity) - 600, ywHeight(entity),
+			      "rgba: 0 0 0 255")
+   yePushBack(entity, obj, "bg2")
+   ywCanvasSetWeight(entity, obj, 10);
+
    ygModDirOut();
    return canvas
 end
