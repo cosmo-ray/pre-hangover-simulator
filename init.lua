@@ -6,7 +6,7 @@ local BASE_SCROLL_SPEED = 5
 local OBSTACLE_DENSITY = 10
 
 local function getStartXY(wid)
-   local x = (ywWidth(wid) - 600) / 2
+   local x = (ywWidth(wid) - 640) / 2
    local y = (ywHeight(wid) - 480) / 2
 
    return x, y
@@ -338,12 +338,13 @@ function createCharmingGuy(entity)
 end
 
 function eatBurger(entity, obstacle)
+   local x, y = getStartXY(entity)
    local txt = yeCreateString("Sara: yum yum, some anti vomit pills, American gastronomy is soo Good !")
 
    if (niceGuyText2) then
       ywCanvasRemoveObj(entity, niceGuyText2)
    end
-   niceGuyText2 = ywCanvasNewText(entity, 50, 80, txt)
+   niceGuyText2 = ywCanvasNewText(entity, x + 50, y + 80, txt)
    niceGuyText2Duration = 20
    yeDestroy(txt)
    local pbs = ywCanvasObjSize(entity, yeGet(entity, "pukeBar"))
@@ -425,7 +426,7 @@ function initPhsWidget(entity)
    soundId = ySoundLoad("./Mars.wav")
    ySoundPlayLoop(soundId)
    if (yeGetInt(isInit) == 0) then
-      yeCreateString("rgba: 0 0 0 255", entity, "background")
+      yeCreateString("rgba: 100 100 100 255", entity, "background")
       yeCreateFunction("phsAction", entity, "action")
       yeCreateInt(60000, entity, "turn-length")
    end
@@ -464,23 +465,21 @@ function initPhsWidget(entity)
    yePushBack(entity, obj, "pukeBar")
    yeDestroy(rect)
 
-   print("s XY:", x, y)
    yeCreateInt(1, entity, "isInit")
-   print(ywWidth(entity), ywHeight(entity))
    obj = ywCanvasNewRectangle(entity, 0, 0, ywWidth(entity),
 			      y, "rgba: 0 0 0 255")
    yePushBack(entity, obj, "bg0")
    ywCanvasSetWeight(entity, obj, 10);
 
-   obj = ywCanvasNewRectangle(entity, x + 0, y + 480, ywWidth(entity),
-			      ywHeight(entity) - 480, "rgba: 0 0 0 255")
-   yePushBack(entity, obj, "bg1")
+   obj = ywCanvasNewRectangle(entity, x + 640, y + 0,
+			      ywWidth(entity) - 600, ywHeight(entity),
+			      "rgba: 100 100 100 255")
+   yePushBack(entity, obj, "bg2")
    ywCanvasSetWeight(entity, obj, 10);
 
-   obj = ywCanvasNewRectangle(entity, x + ywWidth(entity), y + 0,
-			      ywWidth(entity) - 600, ywHeight(entity),
-			      "rgba: 0 0 0 255")
-   yePushBack(entity, obj, "bg2")
+   obj = ywCanvasNewRectangle(entity, 0, y + 480, ywWidth(entity),
+			      ywHeight(entity) - 480, "rgba: 0 0 0 255")
+   yePushBack(entity, obj, "bg1")
    ywCanvasSetWeight(entity, obj, 10);
 
    ygModDirOut();
