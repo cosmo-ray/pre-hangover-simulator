@@ -1,3 +1,6 @@
+-- This Module use very outdated feature from my engine, and I keep it working
+-- but please don't use it as an example
+
 local BASE_CHAR_SPEED = 10
 local BASE_SCROLL_SPEED = 5
 local OBSTACLE_DENSITY = 10
@@ -66,7 +69,7 @@ function checkCollisions(entity)
    local touchBySara = ywCanvasNewCollisionsArrayExt(entity,
 						     sara, isColisionableEntity)
 
-   for i = 0, yeLen(touchBySara) do
+   for i = 0, yeLen(touchBySara) - 1 do
       local touched = yeGet(touchBySara, i)
       yesCall(yeGet(touched, "onTouch"), entity, touched)
    end
@@ -373,7 +376,7 @@ function createObstacle(entity)
 
    yeCreateInt(1, garbage, "type")
 
-   if ywCanvasCheckCollisions(entity, garbage, isColisionableEntity) == 1 then
+   if ywCanvasCheckCollisions(entity, garbage, isColisionableEntity) then
       ywCanvasRemoveObj(entity, garbage);
       return
    end
