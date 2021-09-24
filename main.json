@@ -5,7 +5,7 @@
 	    {
 		"text" : "Play",
 		"next" : "phs:game",
-		"action" : "menuNext",
+		"action" : "menuNext"
 	    },
 	    {
 		"text" : "Full Screen",
